@@ -12,7 +12,7 @@ public class TileManager {
 
     public TileManager(GamePanel gamePanel) {
         this.gamePanel = gamePanel;
-        tile = new TileType[10];
+        tile = new TileType[20];
         mapTile = new int[gamePanel.maxScreenCol][gamePanel.maxScreenRow];
         loadTileImage();
         loadMap("maps/river_map.txt");
@@ -20,17 +20,44 @@ public class TileManager {
 
     public void loadTileImage() {
         try {
-            tile[0] = new TileType("grass", null, false);
-            tile[0].setTileImage(ImageIO.read(getClass().getResourceAsStream("tiles/grass_tile.png")));
+            tile[0] = null;
 
-            tile[1] = new TileType("dirt", null, false);
-            tile[1].setTileImage(ImageIO.read(getClass().getResourceAsStream("tiles/dirt_tile.png")));
+            tile[1] = new TileType("grass", null, false);
+            tile[1].setTileImage(ImageIO.read(getClass().getResourceAsStream("tiles/grass_tile.png")));
 
-            tile[2] = new TileType("water", null, true);
-            tile[2].setTileImage(ImageIO.read(getClass().getResourceAsStream("tiles/water_tile.png")));
+            tile[2] = new TileType("dirt", null, false);
+            tile[2].setTileImage(ImageIO.read(getClass().getResourceAsStream("tiles/dirt_tile.png")));
 
-            tile[3] = new TileType("wood", null, true);
-            tile[3].setTileImage(ImageIO.read(getClass().getResourceAsStream("tiles/wood_tile.png")));
+            tile[3] = new TileType("water", null, true);
+            tile[3].setTileImage(ImageIO.read(getClass().getResourceAsStream("tiles/water_tile.png")));
+
+            tile[4] = new TileType("wood", null, false);
+            tile[4].setTileImage(ImageIO.read(getClass().getResourceAsStream("tiles/wood_tile.png")));
+
+            tile[5] = new TileType("brick", null, true);
+            tile[5].setTileImage(ImageIO.read(getClass().getResourceAsStream("tiles/brick_tile.png")));
+
+            tile[6] = new TileType("dark_grass", null, false);
+            tile[6].setTileImage(ImageIO.read(getClass().getResourceAsStream("tiles/dark_grass_tile.png")));
+
+            tile[7] = new TileType("black", null, true);
+            tile[7].setTileImage(ImageIO.read(getClass().getResourceAsStream("tiles/black_tile.png")));
+
+            tile[8] = new TileType("sand", null, false);
+            tile[8].setTileImage(ImageIO.read(getClass().getResourceAsStream("tiles/sand_tile.png")));
+
+            tile[9] = new TileType("planks", null, false);
+            tile[9].setTileImage(ImageIO.read(getClass().getResourceAsStream("tiles/planks_tile.png")));
+
+            tile[10] = new TileType("stone", null, true);
+            tile[10].setTileImage(ImageIO.read(getClass().getResourceAsStream("tiles/stone_tile.png")));
+
+            tile[11] = new TileType("stone_brick", null, true);
+            tile[11].setTileImage(ImageIO.read(getClass().getResourceAsStream("tiles/stone_brick_tile.png")));
+
+            tile[12] = new TileType("red_brick", null, true);
+            tile[12].setTileImage(ImageIO.read(getClass().getResourceAsStream("tiles/red_brick_tile.png")));
+
         } catch(IOException e) {
             e.printStackTrace();
         }
