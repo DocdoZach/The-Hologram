@@ -1,5 +1,3 @@
-package main.java;
-
 public class HealItem extends Item {
     private int hp;
 

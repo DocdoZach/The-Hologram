@@ -1,5 +1,3 @@
-package main.java;
-
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
@@ -31,7 +29,9 @@ public class GamePanel extends JPanel implements Runnable {
 
         Character docCharacter = new Character(1, 15, 1, 1, 1);
         docComponents.add(docCharacter);
-        doc = new Player("Doc", 0, 0, docComponents, new ArrayList<Item>());
+        Sprite docSprite = new Sprite();
+        docComponents.add(docSprite);
+        doc = new Player("Doc", 0, 0, docComponents, new ArrayList<Item>(), this, keyHandler);
     }
 
     public void startGameThread() {
@@ -78,18 +78,7 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void update() {
-        if(keyHandler.upPressed) {
-            doc.setY(doc.getY() - doc.getMoveSpeed());
-        }
-        if(keyHandler.downPressed) {
-            doc.setY(doc.getY() + doc.getMoveSpeed());
-        }
-        if(keyHandler.leftPressed) {
-            doc.setX(doc.getX() - doc.getMoveSpeed());
-        }
-        if(keyHandler.rightPressed) {
-            doc.setX(doc.getX() + doc.getMoveSpeed());
-        }
+        doc.update();
     }
 
     public void paintComponent(Graphics g) {
@@ -97,9 +86,7 @@ public class GamePanel extends JPanel implements Runnable {
 
         Graphics2D g2 = (Graphics2D)g;
 
-        g2.setColor(Color.white);
-
-        g2.fillRect(doc.getX(), doc.getY(), 48, 80);
+        doc.draw(g2);
 
         g2.dispose();
     }

@@ -1,11 +1,9 @@
-package main.java;
-
 import java.util.ArrayList;
 
 public class Entity {
     private String name;
-    private int x;
-    private int y;
+    int x;
+    int y;
     private ArrayList<Component> components = new ArrayList<>();
 
     public Entity() {

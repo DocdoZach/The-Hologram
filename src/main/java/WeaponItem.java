@@ -1,5 +1,3 @@
-package main.java;
-
 public class WeaponItem extends Item {
     private int atk;
 

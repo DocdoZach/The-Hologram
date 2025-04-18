@@ -1,5 +1,3 @@
-package main.java;
-
 public abstract class Item {
     private String name;
     private int value;
