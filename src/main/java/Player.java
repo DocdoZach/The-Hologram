@@ -22,21 +22,32 @@ public class Player extends Entity {
     }
 
     public void update() {
-        if(keyHandler.upPressed) {
-            getComponent(Sprite.class).direction = "up";
-            this.y -= moveSpeed;
+        if(keyHandler.upPressed || keyHandler.downPressed || keyHandler.leftPressed || keyHandler.rightPressed) {
+            if(keyHandler.upPressed) {
+                getComponent(Sprite.class).direction = "up";
+                this.y -= moveSpeed;
+            }
+            if(keyHandler.downPressed) {
+                getComponent(Sprite.class).direction = "down";
+                this.y += moveSpeed;
+            }
+            if(keyHandler.leftPressed) {
+                getComponent(Sprite.class).direction = "left";
+                this.x -= moveSpeed;
+            }
+            if(keyHandler.rightPressed) {
+                getComponent(Sprite.class).direction = "right";
+                this.x += moveSpeed;
+            }
+            getComponent(Sprite.class).counter++;
         }
-        if(keyHandler.downPressed) {
-            getComponent(Sprite.class).direction = "down";
-            this.y += moveSpeed;
-        }
-        if(keyHandler.leftPressed) {
-            getComponent(Sprite.class).direction = "left";
-            this.x -= moveSpeed;
-        }
-        if(keyHandler.rightPressed) {
-            getComponent(Sprite.class).direction = "right";
-            this.x += moveSpeed;
+
+        if(getComponent(Sprite.class).counter > 12) {
+            if(getComponent(Sprite.class).num == 1) getComponent(Sprite.class).num = 2;
+            else if(getComponent(Sprite.class).num == 2) getComponent(Sprite.class).num = 3;
+            else if(getComponent(Sprite.class).num == 3) getComponent(Sprite.class).num = 4;
+            else if(getComponent(Sprite.class).num == 4) getComponent(Sprite.class).num = 1;
+            getComponent(Sprite.class).counter = 0;
         }
     }
 
@@ -45,16 +56,28 @@ public class Player extends Entity {
 
         switch(getComponent(Sprite.class).direction) {
             case "up":
-                image = getComponent(Sprite.class).up;
+                if(getComponent(Sprite.class).num == 1) image = getComponent(Sprite.class).up;
+                if(getComponent(Sprite.class).num == 2) image = getComponent(Sprite.class).up1;
+                if(getComponent(Sprite.class).num == 3) image = getComponent(Sprite.class).up;
+                if(getComponent(Sprite.class).num == 4) image = getComponent(Sprite.class).up2;
                 break;
             case "down":
-                image = getComponent(Sprite.class).down;
+                if(getComponent(Sprite.class).num == 1) image = getComponent(Sprite.class).down;
+                if(getComponent(Sprite.class).num == 2) image = getComponent(Sprite.class).down1;
+                if(getComponent(Sprite.class).num == 3) image = getComponent(Sprite.class).down;
+                if(getComponent(Sprite.class).num == 4) image = getComponent(Sprite.class).down2;
                 break;
             case "left":
-                image = getComponent(Sprite.class).left;
+                if(getComponent(Sprite.class).num == 1) image = getComponent(Sprite.class).left;
+                if(getComponent(Sprite.class).num == 2) image = getComponent(Sprite.class).left1;
+                if(getComponent(Sprite.class).num == 3) image = getComponent(Sprite.class).left;
+                if(getComponent(Sprite.class).num == 4) image = getComponent(Sprite.class).left1;
                 break;
             case "right":
-                image = getComponent(Sprite.class).right;
+                if(getComponent(Sprite.class).num == 1) image = getComponent(Sprite.class).right;
+                if(getComponent(Sprite.class).num == 2) image = getComponent(Sprite.class).right1;
+                if(getComponent(Sprite.class).num == 3) image = getComponent(Sprite.class).right;
+                if(getComponent(Sprite.class).num == 4) image = getComponent(Sprite.class).right1;
                 break;
         }
 
