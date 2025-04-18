@@ -18,10 +18,13 @@ public class Player extends Entity {
         this.moveSpeed = 4;
         this.gamePanel = gamePanel;
         this.keyHandler = keyHandler;
-        getPlayerImage();
+        loadPlayerImage();
     }
 
     public void update() {
+        if(keyHandler.ctrlPressed) moveSpeed = 8;
+        else moveSpeed = 4;
+
         if(keyHandler.upPressed || keyHandler.downPressed || keyHandler.leftPressed || keyHandler.rightPressed) {
             if(keyHandler.upPressed) {
                 getComponent(Sprite.class).direction = "up";
@@ -41,13 +44,22 @@ public class Player extends Entity {
             }
             getComponent(Sprite.class).counter++;
         }
-
-        if(getComponent(Sprite.class).counter > 12) {
-            if(getComponent(Sprite.class).num == 1) getComponent(Sprite.class).num = 2;
-            else if(getComponent(Sprite.class).num == 2) getComponent(Sprite.class).num = 3;
-            else if(getComponent(Sprite.class).num == 3) getComponent(Sprite.class).num = 4;
-            else if(getComponent(Sprite.class).num == 4) getComponent(Sprite.class).num = 1;
-            getComponent(Sprite.class).counter = 0;
+        if(moveSpeed == 4) {
+            if (getComponent(Sprite.class).counter > 10) {
+                if (getComponent(Sprite.class).num == 1) getComponent(Sprite.class).num = 2;
+                else if (getComponent(Sprite.class).num == 2) getComponent(Sprite.class).num = 3;
+                else if (getComponent(Sprite.class).num == 3) getComponent(Sprite.class).num = 4;
+                else if (getComponent(Sprite.class).num == 4) getComponent(Sprite.class).num = 1;
+                getComponent(Sprite.class).counter = 0;
+            }
+        } else if(moveSpeed == 8) {
+            if (getComponent(Sprite.class).counter > 5) {
+                if (getComponent(Sprite.class).num == 1) getComponent(Sprite.class).num = 2;
+                else if (getComponent(Sprite.class).num == 2) getComponent(Sprite.class).num = 3;
+                else if (getComponent(Sprite.class).num == 3) getComponent(Sprite.class).num = 4;
+                else if (getComponent(Sprite.class).num == 4) getComponent(Sprite.class).num = 1;
+                getComponent(Sprite.class).counter = 0;
+            }
         }
     }
 
@@ -111,7 +123,7 @@ public class Player extends Entity {
         this.moveSpeed = moveSpeed;
     }
 
-    public void getPlayerImage() {
+    public void loadPlayerImage() {
         try {
             Sprite sprite = getComponent(Sprite.class);
             sprite.up = ImageIO.read(getClass().getClassLoader().getResourceAsStream("player/doc_back.png"));
