@@ -15,6 +15,7 @@ public class GamePanel extends JPanel implements Runnable {
     private int FPS = 60;
 
     TileManager tileManager = new TileManager(this);
+    public String currentMap;
 
     KeyHandler keyHandler = new KeyHandler();
     Thread gameThread;
@@ -57,7 +58,6 @@ public class GamePanel extends JPanel implements Runnable {
             drawCount++;
 
             if(timer >= 1000000000) {
-                System.out.println(doc.getX() + ", " + doc.getY());
                 drawCount = 0;
                 timer = 0;
             }

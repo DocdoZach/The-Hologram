@@ -1,15 +1,21 @@
 import javax.imageio.ImageIO;
 import java.awt.*;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 public class TileManager {
     GamePanel gamePanel;
     TileType[] tile;
+    int[][] mapTile;
 
     public TileManager(GamePanel gamePanel) {
         this.gamePanel = gamePanel;
         tile = new TileType[10];
+        mapTile = new int[gamePanel.maxScreenCol][gamePanel.maxScreenRow];
         loadTileImage();
+        loadMap("maps/river_map.txt");
     }
 
     public void loadTileImage() {
@@ -22,16 +28,62 @@ public class TileManager {
 
             tile[2] = new TileType("water", null, true);
             tile[2].setTileImage(ImageIO.read(getClass().getResourceAsStream("tiles/water_tile.png")));
+
+            tile[3] = new TileType("wood", null, true);
+            tile[3].setTileImage(ImageIO.read(getClass().getResourceAsStream("tiles/wood_tile.png")));
         } catch(IOException e) {
             e.printStackTrace();
         }
     }
 
     public void draw(Graphics2D g2) {
-        for(int tileX = 0; tileX < gamePanel.screenWidth; tileX += 32) {
-            for(int tileY = 0; tileY < gamePanel.screenHeight; tileY += 32) {
-                g2.drawImage(tile[0].getTileImage(), tileX, tileY, gamePanel.getTileSize(), gamePanel.getTileSize(), null);
+        int col = 0;
+        int row = 0;
+        int x = 0;
+        int y = 0;
+
+        while(col < gamePanel.maxScreenCol && row < gamePanel.maxScreenRow) {
+            int tileNum = mapTile[col][row];
+
+            g2.drawImage(tile[tileNum].getTileImage(), x, y, gamePanel.getTileSize(), gamePanel.getTileSize(), null);
+            col++;
+            x += gamePanel.getTileSize();
+
+            if(col == gamePanel.maxScreenCol) {
+                col = 0;
+                x = 0;
+                row++;
+                y += gamePanel.getTileSize();
             }
+        }
+    }
+
+    public void loadMap(String map) {
+        try {
+            int col = 0;
+            int row = 0;
+
+            InputStream inputStream = getClass().getResourceAsStream(map);
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+
+            while(col < gamePanel.maxScreenCol && row < gamePanel.maxScreenRow) {
+                String line = bufferedReader.readLine();
+
+                while(col < gamePanel.maxScreenCol) {
+                    String[] numbers = line.split(" ");
+                    int num = Integer.parseInt(numbers[col]);
+                    mapTile[col][row] = num;
+                    col++;
+                }
+                if(col == gamePanel.maxScreenCol) {
+                    col = 0;
+                    row++;
+                }
+            }
+
+            gamePanel.currentMap = map;
+        } catch(Exception e) {
+
         }
     }
 }

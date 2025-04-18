@@ -61,6 +61,7 @@ public class Player extends Entity {
                 getComponent(Sprite.class).counter = 0;
             }
         }
+        if(keyHandler.ePressed) System.out.println("x, y: " + x + ", " + y);
     }
 
     public void draw(Graphics2D g2) {
