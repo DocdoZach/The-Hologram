@@ -6,16 +6,11 @@ public class GamePanel extends JPanel implements Runnable {
     private final int originalTileSize = 8;
     private final int scale = 4;
 
-    private final int tileSize = originalTileSize * scale; // 32x32 tile
+    public final int tileSize = originalTileSize * scale; // 32x32 tile
     public final int maxScreenCol = 25;
     public final int maxScreenRow = 20;
     public final int screenWidth = tileSize * maxScreenCol; // 800 width
     public final int screenHeight = tileSize * maxScreenRow; // 640 height
-
-    public final int maxWorldCol = 50;
-    public final int maxWorldRow = 50;
-    public final int worldWidth = tileSize * maxWorldCol;
-    public final int worldHeight = tileSize * maxWorldRow;
 
     private int FPS = 60;
 
@@ -23,7 +18,7 @@ public class GamePanel extends JPanel implements Runnable {
     public Player doc;
 
     TileManager tileManager = new TileManager(this);
-    public String currentMap;
+    public Map currentMap;
 
     KeyHandler keyHandler = new KeyHandler();
     Thread gameThread;
@@ -97,9 +92,5 @@ public class GamePanel extends JPanel implements Runnable {
         doc.draw(g2);
 
         g2.dispose();
-    }
-
-    public int getTileSize() {
-        return tileSize;
     }
 }
