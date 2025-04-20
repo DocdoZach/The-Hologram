@@ -11,6 +11,7 @@ public class Player extends Entity {
     KeyHandler keyHandler;
     private int moveSpeed;
     private ArrayList<Item> inventory = new ArrayList<>();
+    public int cameraX, cameraY;
 
     public Player(String name, int x, int y, ArrayList<Component> components, ArrayList<Item> inventory, GamePanel gamePanel, KeyHandler keyHandler) {
         super(name, x, y, components);
@@ -18,6 +19,8 @@ public class Player extends Entity {
         this.moveSpeed = 4;
         this.gamePanel = gamePanel;
         this.keyHandler = keyHandler;
+        this.cameraX = gamePanel.screenWidth / 2 - 24;
+        this.cameraY = gamePanel.screenHeight / 2 - 40;
         loadPlayerImage();
     }
 
@@ -41,6 +44,12 @@ public class Player extends Entity {
             if(keyHandler.rightPressed) {
                 getComponent(Sprite.class).direction = "right";
                 this.x += moveSpeed;
+            }
+            if(keyHandler.upPressed && keyHandler.leftPressed && keyHandler.rightPressed) {
+                getComponent(Sprite.class).direction = "up";
+            }
+            if(keyHandler.downPressed && keyHandler.leftPressed && keyHandler.rightPressed) {
+                getComponent(Sprite.class).direction = "down";
             }
             getComponent(Sprite.class).counter++;
         }
@@ -94,7 +103,7 @@ public class Player extends Entity {
                 break;
         }
 
-        g2.drawImage(image, x, y, 48, 80, null);
+        g2.drawImage(image, cameraX, cameraY, 48, 80, null);
     }
 
     public Item getItem(int index) {
