@@ -15,8 +15,6 @@ public class TileManager {
         this.gamePanel = gamePanel;
         tile = new TileType[20];
         loadTileImage();
-
-        loadMap(new Map(50, 50, "maps/beach_map.txt", null));
     }
 
     public boolean isPointSolid(int x, int y) {
