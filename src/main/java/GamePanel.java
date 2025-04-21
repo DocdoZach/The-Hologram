@@ -27,7 +27,6 @@ public class GamePanel extends JPanel implements Runnable {
     public Map currentMap;
     KeyHandler keyHandler = new KeyHandler();
     Thread gameThread;
-    CollisionChecker collisionChecker = new CollisionChecker(this);
 
     public GamePanel() {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
