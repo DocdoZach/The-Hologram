@@ -21,6 +21,30 @@ public class TileManager {
         loadMap(riverMap);
     }
 
+    public boolean isPointSolid(int x, int y) {
+        int col = (x / 32);
+        int row = (y / 32);
+
+        if(x < 0 || y < 0 || col >= gamePanel.currentMap.getMaxCol() || row >= gamePanel.currentMap.getMaxRow()) {
+            return true;
+        }
+
+        return this.tile[mapTile[col][row]].isHasCollision();
+    }
+
+    public boolean isTileSolid(int x, int y, int width, int height) {
+        int xChecks = (int)Math.ceil((double) width / gamePanel.tileSize);
+        int yChecks = (int)Math.ceil((double) height / gamePanel.tileSize);
+        for(int iy = 0; iy < yChecks; iy++) {
+            for(int ix = 0; ix < xChecks; ix++) {
+                int _x = ix * gamePanel.tileSize + x;
+                int _y = iy * gamePanel.tileSize + y;
+                if(isPointSolid(_x, _y)) return true;
+            }
+        }
+        return isPointSolid(x + width, y) || isPointSolid(x, y + height) || isPointSolid(x + width, y + height);
+    }
+
     public void loadTileImage() {
         try {
             tile[0] = null;

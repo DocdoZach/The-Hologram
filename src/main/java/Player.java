@@ -25,6 +25,9 @@ public class Player extends Entity {
     }
 
     public void update() {
+        int previousX = this.x;
+        int previousY = this.y;
+
         if(keyHandler.ctrlPressed) moveSpeed = 8;
         else moveSpeed = 4;
 
@@ -37,6 +40,8 @@ public class Player extends Entity {
                 getComponent(Sprite.class).direction = "down";
                 this.y += moveSpeed;
             }
+            if(!this.getComponent(Body.class).isPositionValid()) this.y = previousY;
+
             if(keyHandler.leftPressed) {
                 getComponent(Sprite.class).direction = "left";
                 this.x -= moveSpeed;
@@ -45,12 +50,18 @@ public class Player extends Entity {
                 getComponent(Sprite.class).direction = "right";
                 this.x += moveSpeed;
             }
+            if(!this.getComponent(Body.class).isPositionValid()) this.x = previousX;
+
             if(keyHandler.upPressed && keyHandler.leftPressed && keyHandler.rightPressed) {
                 getComponent(Sprite.class).direction = "up";
             }
             if(keyHandler.downPressed && keyHandler.leftPressed && keyHandler.rightPressed) {
                 getComponent(Sprite.class).direction = "down";
             }
+
+            this.getComponent(Body.class).setCollision(false);
+            gamePanel.collisionChecker.checkTile(this);
+
             getComponent(Sprite.class).counter++;
         }
         if(moveSpeed == 4) {
@@ -78,32 +89,32 @@ public class Player extends Entity {
 
         switch(getComponent(Sprite.class).direction) {
             case "up":
-                if(getComponent(Sprite.class).num == 1) image = getComponent(Sprite.class).up;
-                if(getComponent(Sprite.class).num == 2) image = getComponent(Sprite.class).up1;
-                if(getComponent(Sprite.class).num == 3) image = getComponent(Sprite.class).up;
-                if(getComponent(Sprite.class).num == 4) image = getComponent(Sprite.class).up2;
+                if(getComponent(Sprite.class).num == 1) image = getComponent(Sprite.class).images.get(0);
+                if(getComponent(Sprite.class).num == 2) image = getComponent(Sprite.class).images.get(1);
+                if(getComponent(Sprite.class).num == 3) image = getComponent(Sprite.class).images.get(0);
+                if(getComponent(Sprite.class).num == 4) image = getComponent(Sprite.class).images.get(2);
                 break;
             case "down":
-                if(getComponent(Sprite.class).num == 1) image = getComponent(Sprite.class).down;
-                if(getComponent(Sprite.class).num == 2) image = getComponent(Sprite.class).down1;
-                if(getComponent(Sprite.class).num == 3) image = getComponent(Sprite.class).down;
-                if(getComponent(Sprite.class).num == 4) image = getComponent(Sprite.class).down2;
+                if(getComponent(Sprite.class).num == 1) image = getComponent(Sprite.class).images.get(3);
+                if(getComponent(Sprite.class).num == 2) image = getComponent(Sprite.class).images.get(4);
+                if(getComponent(Sprite.class).num == 3) image = getComponent(Sprite.class).images.get(3);
+                if(getComponent(Sprite.class).num == 4) image = getComponent(Sprite.class).images.get(5);
                 break;
             case "left":
-                if(getComponent(Sprite.class).num == 1) image = getComponent(Sprite.class).left;
-                if(getComponent(Sprite.class).num == 2) image = getComponent(Sprite.class).left1;
-                if(getComponent(Sprite.class).num == 3) image = getComponent(Sprite.class).left;
-                if(getComponent(Sprite.class).num == 4) image = getComponent(Sprite.class).left1;
+                if(getComponent(Sprite.class).num == 1) image = getComponent(Sprite.class).images.get(6);
+                if(getComponent(Sprite.class).num == 2) image = getComponent(Sprite.class).images.get(7);
+                if(getComponent(Sprite.class).num == 3) image = getComponent(Sprite.class).images.get(6);
+                if(getComponent(Sprite.class).num == 4) image = getComponent(Sprite.class).images.get(7);
                 break;
             case "right":
-                if(getComponent(Sprite.class).num == 1) image = getComponent(Sprite.class).right;
-                if(getComponent(Sprite.class).num == 2) image = getComponent(Sprite.class).right1;
-                if(getComponent(Sprite.class).num == 3) image = getComponent(Sprite.class).right;
-                if(getComponent(Sprite.class).num == 4) image = getComponent(Sprite.class).right1;
+                if(getComponent(Sprite.class).num == 1) image = getComponent(Sprite.class).images.get(8);
+                if(getComponent(Sprite.class).num == 2) image = getComponent(Sprite.class).images.get(9);
+                if(getComponent(Sprite.class).num == 3) image = getComponent(Sprite.class).images.get(8);
+                if(getComponent(Sprite.class).num == 4) image = getComponent(Sprite.class).images.get(9);
                 break;
         }
 
-        g2.drawImage(image, cameraX, cameraY, 48, 80, null);
+        g2.drawImage(image, cameraX, cameraY, this.getComponent(Sprite.class).width * gamePanel.scale, this.getComponent(Sprite.class).height * gamePanel.scale, null);
     }
 
     public Item getItem(int index) {
@@ -136,16 +147,16 @@ public class Player extends Entity {
     public void loadPlayerImage() {
         try {
             Sprite sprite = getComponent(Sprite.class);
-            sprite.up = ImageIO.read(getClass().getClassLoader().getResourceAsStream("player/doc_back.png"));
-            sprite.up1 = ImageIO.read(getClass().getClassLoader().getResourceAsStream("player/doc_walking_back-1.png"));
-            sprite.up2 = ImageIO.read(getClass().getClassLoader().getResourceAsStream("player/doc_walking_back-2.png"));
-            sprite.down = ImageIO.read(getClass().getClassLoader().getResourceAsStream("player/doc.png"));
-            sprite.down1 = ImageIO.read(getClass().getClassLoader().getResourceAsStream("player/doc_walking-1.png"));
-            sprite.down2 = ImageIO.read(getClass().getClassLoader().getResourceAsStream("player/doc_walking-2.png"));
-            sprite.left = ImageIO.read(getClass().getClassLoader().getResourceAsStream("player/doc_left.png"));
-            sprite.left1 = ImageIO.read(getClass().getClassLoader().getResourceAsStream("player/doc_walking_left.png"));
-            sprite.right = ImageIO.read(getClass().getClassLoader().getResourceAsStream("player/doc_right.png"));
-            sprite.right1 = ImageIO.read(getClass().getClassLoader().getResourceAsStream("player/doc_walking_right.png"));
+            sprite.images.set(0, ImageIO.read(getClass().getClassLoader().getResourceAsStream("player/doc_back.png")));
+            sprite.images.set(1, ImageIO.read(getClass().getClassLoader().getResourceAsStream("player/doc_walking_back-1.png")));
+            sprite.images.set(2, ImageIO.read(getClass().getClassLoader().getResourceAsStream("player/doc_walking_back-2.png")));
+            sprite.images.set(3, ImageIO.read(getClass().getClassLoader().getResourceAsStream("player/doc.png")));
+            sprite.images.set(4, ImageIO.read(getClass().getClassLoader().getResourceAsStream("player/doc_walking-1.png")));
+            sprite.images.set(5, ImageIO.read(getClass().getClassLoader().getResourceAsStream("player/doc_walking-2.png")));
+            sprite.images.set(6, ImageIO.read(getClass().getClassLoader().getResourceAsStream("player/doc_left.png")));
+            sprite.images.set(7, ImageIO.read(getClass().getClassLoader().getResourceAsStream("player/doc_walking_left.png")));
+            sprite.images.set(8, ImageIO.read(getClass().getClassLoader().getResourceAsStream("player/doc_right.png")));
+            sprite.images.set(9, ImageIO.read(getClass().getClassLoader().getResourceAsStream("player/doc_walking_right.png")));
 
         } catch(IOException e) {
             e.printStackTrace();
