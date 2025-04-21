@@ -3,7 +3,7 @@ import java.awt.image.BufferedImage;
 public class TileType {
     private String name;
     private BufferedImage tileImage;
-    private boolean hasCollision = false;
+    private boolean hasCollision;
 
     public TileType(String name, BufferedImage tileImage, Boolean hasCollision) {
         this.name = name;

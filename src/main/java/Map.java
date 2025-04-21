@@ -15,7 +15,7 @@ public class Map {
     public int getMaxCol() {
         return maxCol;
     }
-    public void setTileSize(int maxCol) {
+    public void setMaxCol(int maxCol) {
         this.maxCol = maxCol;
     }
     public int getMaxRow() {
