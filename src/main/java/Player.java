@@ -60,7 +60,6 @@ public class Player extends Entity {
             }
 
             this.getComponent(Body.class).setCollision(false);
-            gamePanel.collisionChecker.checkTile(this);
 
             getComponent(Sprite.class).counter++;
         }
