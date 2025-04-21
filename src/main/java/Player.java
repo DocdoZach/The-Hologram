@@ -9,16 +9,18 @@ import java.util.ArrayList;
 public class Player extends Entity {
     GamePanel gamePanel;
     KeyHandler keyHandler;
+    TileManager tileManager;
     private int moveSpeed;
     private ArrayList<Item> inventory = new ArrayList<>();
     public int cameraX, cameraY;
 
-    public Player(String name, int x, int y, ArrayList<Component> components, ArrayList<Item> inventory, GamePanel gamePanel, KeyHandler keyHandler) {
+    public Player(String name, int x, int y, ArrayList<Component> components, ArrayList<Item> inventory, GamePanel gamePanel, KeyHandler keyHandler, TileManager tileManager) {
         super(name, x, y, components);
         this.inventory = inventory;
         this.moveSpeed = 4;
         this.gamePanel = gamePanel;
         this.keyHandler = keyHandler;
+        this.tileManager = tileManager;
         this.cameraX = gamePanel.screenWidth / 2 - 24;
         this.cameraY = gamePanel.screenHeight / 2 - 40;
         loadPlayerImage();

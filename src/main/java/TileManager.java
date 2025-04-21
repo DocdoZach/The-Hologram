@@ -9,26 +9,25 @@ public class TileManager {
     GamePanel gamePanel;
     TileType[] tile;
     int[][] mapTile;
-
-    Map riverMap;
+    Map currentMap;
 
     public TileManager(GamePanel gamePanel) {
         this.gamePanel = gamePanel;
         tile = new TileType[20];
         loadTileImage();
 
-        this.riverMap = new Map(50, 50, "maps/river_map.txt", null);
-        loadMap(riverMap);
+        loadMap(new Map(50, 50, "maps/beach_map.txt", null));
     }
 
     public boolean isPointSolid(int x, int y) {
         int col = (x / 32);
         int row = (y / 32);
 
-        if(x < 0 || y < 0 || col >= gamePanel.currentMap.getMaxCol() || row >= gamePanel.currentMap.getMaxRow()) {
+        if(x < 0 || y < 28 || col >= currentMap.getMaxCol() || row >= currentMap.getMaxRow() + 36) {
             return true;
         }
 
+        if(y >= 1556) return false;
         return this.tile[mapTile[col][row]].isHasCollision();
     }
 
@@ -124,7 +123,6 @@ public class TileManager {
 
             InputStream inputStream = getClass().getResourceAsStream(map.getFilePath());
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-            System.out.println(map.getMaxCol() + ", " + map.getMaxRow());
 
             while(col < map.getMaxCol() && row < map.getMaxRow()) {
                 String line = bufferedReader.readLine();
@@ -140,8 +138,7 @@ public class TileManager {
                     row++;
                 }
             }
-
-            gamePanel.currentMap = map;
+            currentMap = map;
         } catch(Exception e) {
 
         }
