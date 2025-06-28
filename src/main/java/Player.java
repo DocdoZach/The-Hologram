@@ -82,7 +82,26 @@ public class Player extends Entity {
                 getComponent(Sprite.class).counter = 0;
             }
         }
-        if(keyHandler.ePressed) System.out.println("x, y: " + x + ", " + y);
+        if(keyHandler.ePressed) System.out.println("x, y: " + x + ", " + y + "\ncamera x, y: " + cameraX + ", " + cameraY);
+
+        int targetCameraX = gamePanel.screenWidth / 2 - 24;
+        int targetCameraY = gamePanel.screenHeight / 2 - 40;
+
+        if(this.x < gamePanel.screenWidth / 2 - 24) {
+            targetCameraX = this.x;
+        }
+        else if(this.x > gamePanel.tileManager.currentMap.getMaxCol() * gamePanel.tileSize - gamePanel.screenWidth / 2 - 24) {
+            targetCameraX = this.x - gamePanel.tileManager.currentMap.getMaxCol() * gamePanel.tileSize + gamePanel.screenWidth;
+        }
+        if(this.y < gamePanel.screenHeight / 2 - 40) {
+            targetCameraY = this.y;
+        }
+        else if(this.y > gamePanel.tileManager.currentMap.getMaxRow() * gamePanel.tileSize - gamePanel.screenHeight / 2 - 40) {
+            targetCameraY = this.y - gamePanel.tileManager.currentMap.getMaxRow() * gamePanel.tileSize + gamePanel.screenHeight;
+        }
+
+        cameraX = targetCameraX;
+        cameraY = targetCameraY;
     }
 
     public void draw(Graphics2D g2) {

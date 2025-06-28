@@ -99,8 +99,8 @@ public class TileManager {
             int screenX = x - gamePanel.doc.getX() + gamePanel.doc.cameraX;
             int screenY = y - gamePanel.doc.getY() + gamePanel.doc.cameraY;
 
-            if(x + gamePanel.tileSize > gamePanel.doc.getX() - gamePanel.doc.cameraX && x - gamePanel.tileSize * 2 < gamePanel.doc.getX() + gamePanel.doc.cameraX &&
-               y + gamePanel.tileSize > gamePanel.doc.getY() - gamePanel.doc.cameraY && y - gamePanel.tileSize * 3 < gamePanel.doc.getY() + gamePanel.doc.cameraY) {
+            if(x + gamePanel.tileSize > gamePanel.doc.getX() - gamePanel.doc.cameraX &&
+               y + gamePanel.tileSize > gamePanel.doc.getY() - gamePanel.doc.cameraY) {
                 g2.drawImage(tile[tileNum].getTileImage(), screenX, screenY, gamePanel.tileSize, gamePanel.tileSize, null);
             }
 
