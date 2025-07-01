@@ -1,3 +1,5 @@
+import javax.imageio.ImageIO;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class Map {
@@ -14,6 +16,18 @@ public class Map {
         this.entities = entities;
     }
 
+    public void toggleMap(Map newMap) {
+        for(Entity entity : this.entities) {
+            if(entity.getComponent(Sprite.class) != null) {
+                entity.getComponent(Sprite.class).show = false;
+            }
+            GamePanel.bodies.remove(entity.getComponent(Body.class));
+        }
+        for(Entity entity : newMap.entities) {
+            entity.getComponent(Sprite.class).show = true;
+            GamePanel.bodies.add(entity.getComponent(Body.class));
+        }
+    }
     public String getName() {
         return name;
     }

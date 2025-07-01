@@ -1,17 +1,13 @@
 import java.awt.*;
-import java.util.ArrayList;
 
-public class Body extends Component {
-    public static ArrayList<Body> bodies = new ArrayList<>();
-
-    private Rectangle hitbox;
+public class Body extends Component {private Rectangle hitbox;
     private GamePanel gamePanel;
     private boolean collision;
 
     public Body(Rectangle hitbox, GamePanel gamePanel) {
         this.hitbox = hitbox;
         this.gamePanel = gamePanel;
-        bodies.add(this);
+        gamePanel.bodies.add(this);
     }
 
     public boolean isPositionValid() {
@@ -19,13 +15,17 @@ public class Body extends Component {
         int y = this.entity.y + this.hitbox.y;
         if(gamePanel.tileManager.isTileSolid(x, y, this.hitbox.width - 4, this.hitbox.height - 4)) return false;
 
-        for(Body body : bodies) {
+        for(Body body : gamePanel.bodies) {
             if(body != this && body.isCollidingWith(this)) return false;
         }
         return true;
     }
 
     public boolean isCollidingWith(Body other) {
+        if(this.entity == null) {
+            return false;
+        }
+
         int x = this.entity.x + this.hitbox.x;
         int y = this.entity.y + this.hitbox.y;
         int otherX = other.entity.x + other.hitbox.x;

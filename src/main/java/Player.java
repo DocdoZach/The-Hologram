@@ -23,7 +23,6 @@ public class Player extends Entity {
         this.tileManager = tileManager;
         this.cameraX = gamePanel.screenWidth / 2 - 24;
         this.cameraY = gamePanel.screenHeight / 2 - 40;
-        loadPlayerImage();
     }
 
     public void update() {
@@ -35,54 +34,46 @@ public class Player extends Entity {
 
         if(keyHandler.upPressed || keyHandler.downPressed || keyHandler.leftPressed || keyHandler.rightPressed) {
             if(keyHandler.upPressed) {
-                getComponent(Sprite.class).direction = "up";
+                getComponent(MultiSprite.class).useSprite("up");
                 this.y -= moveSpeed;
             }
             if(keyHandler.downPressed) {
-                getComponent(Sprite.class).direction = "down";
+                getComponent(MultiSprite.class).useSprite("down");
                 this.y += moveSpeed;
             }
             if(!this.getComponent(Body.class).isPositionValid()) this.y = previousY;
 
             if(keyHandler.leftPressed) {
-                getComponent(Sprite.class).direction = "left";
+                getComponent(MultiSprite.class).useSprite("left");
                 this.x -= moveSpeed;
             }
             if(keyHandler.rightPressed) {
-                getComponent(Sprite.class).direction = "right";
+                getComponent(MultiSprite.class).useSprite("right");
                 this.x += moveSpeed;
             }
             if(!this.getComponent(Body.class).isPositionValid()) this.x = previousX;
 
             if(keyHandler.upPressed && keyHandler.leftPressed && keyHandler.rightPressed) {
-                getComponent(Sprite.class).direction = "up";
+                getComponent(MultiSprite.class).useSprite("up");
             }
             if(keyHandler.downPressed && keyHandler.leftPressed && keyHandler.rightPressed) {
-                getComponent(Sprite.class).direction = "down";
+                getComponent(MultiSprite.class).useSprite("down");
             }
 
             this.getComponent(Body.class).setCollision(false);
 
-            getComponent(Sprite.class).counter++;
+            getComponent(MultiSprite.class).currentSprite.counter++;
         }
+
         if(moveSpeed == 4) {
-            if (getComponent(Sprite.class).counter > 10) {
-                if (getComponent(Sprite.class).num == 1) getComponent(Sprite.class).num = 2;
-                else if (getComponent(Sprite.class).num == 2) getComponent(Sprite.class).num = 3;
-                else if (getComponent(Sprite.class).num == 3) getComponent(Sprite.class).num = 4;
-                else if (getComponent(Sprite.class).num == 4) getComponent(Sprite.class).num = 1;
-                getComponent(Sprite.class).counter = 0;
-            }
+            getComponent(MultiSprite.class).currentSprite.counterMax = 10;
         } else if(moveSpeed == 8) {
-            if (getComponent(Sprite.class).counter > 5) {
-                if (getComponent(Sprite.class).num == 1) getComponent(Sprite.class).num = 2;
-                else if (getComponent(Sprite.class).num == 2) getComponent(Sprite.class).num = 3;
-                else if (getComponent(Sprite.class).num == 3) getComponent(Sprite.class).num = 4;
-                else if (getComponent(Sprite.class).num == 4) getComponent(Sprite.class).num = 1;
-                getComponent(Sprite.class).counter = 0;
-            }
+            getComponent(MultiSprite.class).currentSprite.counterMax = 5;
         }
-        if(keyHandler.ePressed) System.out.println("x, y: " + x + ", " + y + "\ncamera x, y: " + cameraX + ", " + cameraY);
+
+        if(keyHandler.ePressed) {
+            System.out.println("x, y: " + x + ", " + y + "\ncamera x, y: " + cameraX + ", " + cameraY);
+        }
 
         int targetCameraX = gamePanel.screenWidth / 2 - 24;
         int targetCameraY = gamePanel.screenHeight / 2 - 40;
@@ -102,39 +93,6 @@ public class Player extends Entity {
 
         cameraX = targetCameraX;
         cameraY = targetCameraY;
-    }
-
-    public void draw(Graphics2D g2) {
-        BufferedImage image = null;
-
-        switch(getComponent(Sprite.class).direction) {
-            case "up":
-                if(getComponent(Sprite.class).num == 1) image = getComponent(Sprite.class).images.get(0);
-                if(getComponent(Sprite.class).num == 2) image = getComponent(Sprite.class).images.get(1);
-                if(getComponent(Sprite.class).num == 3) image = getComponent(Sprite.class).images.get(0);
-                if(getComponent(Sprite.class).num == 4) image = getComponent(Sprite.class).images.get(2);
-                break;
-            case "down":
-                if(getComponent(Sprite.class).num == 1) image = getComponent(Sprite.class).images.get(3);
-                if(getComponent(Sprite.class).num == 2) image = getComponent(Sprite.class).images.get(4);
-                if(getComponent(Sprite.class).num == 3) image = getComponent(Sprite.class).images.get(3);
-                if(getComponent(Sprite.class).num == 4) image = getComponent(Sprite.class).images.get(5);
-                break;
-            case "left":
-                if(getComponent(Sprite.class).num == 1) image = getComponent(Sprite.class).images.get(6);
-                if(getComponent(Sprite.class).num == 2) image = getComponent(Sprite.class).images.get(7);
-                if(getComponent(Sprite.class).num == 3) image = getComponent(Sprite.class).images.get(6);
-                if(getComponent(Sprite.class).num == 4) image = getComponent(Sprite.class).images.get(7);
-                break;
-            case "right":
-                if(getComponent(Sprite.class).num == 1) image = getComponent(Sprite.class).images.get(8);
-                if(getComponent(Sprite.class).num == 2) image = getComponent(Sprite.class).images.get(9);
-                if(getComponent(Sprite.class).num == 3) image = getComponent(Sprite.class).images.get(8);
-                if(getComponent(Sprite.class).num == 4) image = getComponent(Sprite.class).images.get(9);
-                break;
-        }
-
-        g2.drawImage(image, cameraX, cameraY, this.getComponent(Sprite.class).width * gamePanel.scale, this.getComponent(Sprite.class).height * gamePanel.scale, null);
     }
 
     public Item getItem(int index) {
@@ -162,24 +120,5 @@ public class Player extends Entity {
 
     public void setMoveSpeed(int moveSpeed) {
         this.moveSpeed = moveSpeed;
-    }
-
-    public void loadPlayerImage() {
-        try {
-            Sprite sprite = getComponent(Sprite.class);
-            sprite.images.set(0, ImageIO.read(getClass().getClassLoader().getResourceAsStream("player/doc_back.png")));
-            sprite.images.set(1, ImageIO.read(getClass().getClassLoader().getResourceAsStream("player/doc_walking_back-1.png")));
-            sprite.images.set(2, ImageIO.read(getClass().getClassLoader().getResourceAsStream("player/doc_walking_back-2.png")));
-            sprite.images.set(3, ImageIO.read(getClass().getClassLoader().getResourceAsStream("player/doc.png")));
-            sprite.images.set(4, ImageIO.read(getClass().getClassLoader().getResourceAsStream("player/doc_walking-1.png")));
-            sprite.images.set(5, ImageIO.read(getClass().getClassLoader().getResourceAsStream("player/doc_walking-2.png")));
-            sprite.images.set(6, ImageIO.read(getClass().getClassLoader().getResourceAsStream("player/doc_left.png")));
-            sprite.images.set(7, ImageIO.read(getClass().getClassLoader().getResourceAsStream("player/doc_walking_left.png")));
-            sprite.images.set(8, ImageIO.read(getClass().getClassLoader().getResourceAsStream("player/doc_right.png")));
-            sprite.images.set(9, ImageIO.read(getClass().getClassLoader().getResourceAsStream("player/doc_walking_right.png")));
-
-        } catch(IOException e) {
-            e.printStackTrace();
-        }
     }
 }

@@ -137,6 +137,7 @@ public class TileManager {
                 }
             }
             currentMap = map;
+            currentMap.toggleMap(map);
         } catch(Exception e) {
 
         }
