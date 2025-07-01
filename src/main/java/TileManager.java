@@ -6,10 +6,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 public class TileManager {
-    GamePanel gamePanel;
-    TileType[] tile;
-    int[][] mapTile;
-    Map currentMap;
+    private GamePanel gamePanel;
+    private TileType[] tile;
+    private int[][] mapTile;
+    private Map currentMap;
 
     public TileManager(GamePanel gamePanel) {
         this.gamePanel = gamePanel;
@@ -96,11 +96,11 @@ public class TileManager {
             int x = worldCol * gamePanel.tileSize;
             int y = worldRow * gamePanel.tileSize;
 
-            int screenX = x - gamePanel.doc.getX() + gamePanel.doc.cameraX;
-            int screenY = y - gamePanel.doc.getY() + gamePanel.doc.cameraY;
+            int screenX = x - gamePanel.doc.getX() + gamePanel.doc.getCameraX();
+            int screenY = y - gamePanel.doc.getY() + gamePanel.doc.getCameraY();
 
-            if(x + gamePanel.tileSize > gamePanel.doc.getX() - gamePanel.doc.cameraX &&
-               y + gamePanel.tileSize > gamePanel.doc.getY() - gamePanel.doc.cameraY) {
+            if(x + gamePanel.tileSize > gamePanel.doc.getX() - gamePanel.doc.getCameraX() &&
+               y + gamePanel.tileSize > gamePanel.doc.getY() - gamePanel.doc.getCameraY()) {
                 g2.drawImage(tile[tileNum].getTileImage(), screenX, screenY, gamePanel.tileSize, gamePanel.tileSize, null);
             }
 
@@ -141,5 +141,9 @@ public class TileManager {
         } catch(Exception e) {
 
         }
+    }
+
+    public Map getCurrentMap() {
+        return currentMap;
     }
 }

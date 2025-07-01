@@ -2,8 +2,8 @@ import java.util.ArrayList;
 
 public class Entity {
     private String name;
-    int x;
-    int y;
+    private int x;
+    private int y;
     private ArrayList<Component> components = new ArrayList<>();
 
     public Entity() {
@@ -74,6 +74,14 @@ public class Entity {
 
     public void setY(int y) {
         this.y = y;
+    }
+
+    public void moveX(int distance) {
+        x += distance;
+    }
+
+    public void moveY(int distance) {
+        y += distance;
     }
 
     public void addComponent(Component component) {

@@ -1,8 +1,8 @@
 import java.util.HashMap;
 
 public class MultiSprite extends Component {
-    public HashMap<String, Sprite> sprites;
-    public Sprite currentSprite;
+    private HashMap<String, Sprite> sprites;
+    private Sprite currentSprite;
 
     public MultiSprite(Entity entity) {
         this.sprites = new HashMap<>();
@@ -11,14 +11,18 @@ public class MultiSprite extends Component {
 
     public void useSprite(String key) {
         for(Sprite s : sprites.values()) {
-            s.show = false;
+            s.setShow(false);
         }
-        sprites.get(key).show = true;
+        sprites.get(key).setShow(true);
         this.currentSprite = sprites.get(key);
     }
 
     public void addSprite(String key, Sprite sprite) {
         sprite.entity = this.entity;
         sprites.put(key, sprite);
+    }
+
+    public Sprite getCurrentSprite() {
+        return currentSprite;
     }
 }

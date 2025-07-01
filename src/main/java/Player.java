@@ -1,18 +1,12 @@
-import javax.imageio.ImageIO;
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.nio.Buffer;
 import java.util.ArrayList;
 
 public class Player extends Entity {
-    GamePanel gamePanel;
-    KeyHandler keyHandler;
-    TileManager tileManager;
+    private GamePanel gamePanel;
+    private KeyHandler keyHandler;
     private int moveSpeed;
     private ArrayList<Item> inventory = new ArrayList<>();
-    public int cameraX, cameraY;
+    private int cameraX, cameraY;
+    private boolean ePressedPrev;
 
     public Player(String name, int x, int y, ArrayList<Component> components, ArrayList<Item> inventory, GamePanel gamePanel, KeyHandler keyHandler, TileManager tileManager) {
         super(name, x, y, components);
@@ -20,75 +14,74 @@ public class Player extends Entity {
         this.moveSpeed = 4;
         this.gamePanel = gamePanel;
         this.keyHandler = keyHandler;
-        this.tileManager = tileManager;
         this.cameraX = gamePanel.screenWidth / 2 - 24;
         this.cameraY = gamePanel.screenHeight / 2 - 40;
     }
 
     public void update() {
-        int previousX = this.x;
-        int previousY = this.y;
+        int previousX = this.getX();
+        int previousY = this.getY();
 
-        if(keyHandler.ctrlPressed) moveSpeed = 8;
+        if(keyHandler.getKeyPressed(Key.RUN)) moveSpeed = 8;
         else moveSpeed = 4;
 
-        if(keyHandler.upPressed || keyHandler.downPressed || keyHandler.leftPressed || keyHandler.rightPressed) {
-            if(keyHandler.upPressed) {
+        if(keyHandler.getKeyPressed(Key.UP) || keyHandler.getKeyPressed(Key.DOWN) || keyHandler.getKeyPressed(Key.LEFT) || keyHandler.getKeyPressed(Key.RIGHT)) {
+            if(keyHandler.getKeyPressed(Key.UP)) {
                 getComponent(MultiSprite.class).useSprite("up");
-                this.y -= moveSpeed;
+                moveY(-moveSpeed);
             }
-            if(keyHandler.downPressed) {
+            if(keyHandler.getKeyPressed(Key.DOWN)) {
                 getComponent(MultiSprite.class).useSprite("down");
-                this.y += moveSpeed;
+                moveY(moveSpeed);
             }
-            if(!this.getComponent(Body.class).isPositionValid()) this.y = previousY;
+            if(!this.getComponent(Body.class).isPositionValid()) setY(previousY);
 
-            if(keyHandler.leftPressed) {
+            if(keyHandler.getKeyPressed(Key.LEFT)) {
                 getComponent(MultiSprite.class).useSprite("left");
-                this.x -= moveSpeed;
+                moveX(-moveSpeed);
             }
-            if(keyHandler.rightPressed) {
+            if(keyHandler.getKeyPressed(Key.RIGHT)) {
                 getComponent(MultiSprite.class).useSprite("right");
-                this.x += moveSpeed;
+                moveX(moveSpeed);
             }
-            if(!this.getComponent(Body.class).isPositionValid()) this.x = previousX;
+            if(!this.getComponent(Body.class).isPositionValid()) setX(previousX);
 
-            if(keyHandler.upPressed && keyHandler.leftPressed && keyHandler.rightPressed) {
+            if(keyHandler.getKeyPressed(Key.UP) && keyHandler.getKeyPressed(Key.LEFT) && keyHandler.getKeyPressed(Key.RIGHT)) {
                 getComponent(MultiSprite.class).useSprite("up");
             }
-            if(keyHandler.downPressed && keyHandler.leftPressed && keyHandler.rightPressed) {
+            if(keyHandler.getKeyPressed(Key.DOWN) && keyHandler.getKeyPressed(Key.LEFT) && keyHandler.getKeyPressed(Key.RIGHT)) {
                 getComponent(MultiSprite.class).useSprite("down");
             }
 
             this.getComponent(Body.class).setCollision(false);
 
-            getComponent(MultiSprite.class).currentSprite.counter++;
+            getComponent(MultiSprite.class).getCurrentSprite().countUp();
         }
 
         if(moveSpeed == 4) {
-            getComponent(MultiSprite.class).currentSprite.counterMax = 10;
+            getComponent(MultiSprite.class).getCurrentSprite().setCounterMax(10);
         } else if(moveSpeed == 8) {
-            getComponent(MultiSprite.class).currentSprite.counterMax = 5;
+            getComponent(MultiSprite.class).getCurrentSprite().setCounterMax(5);
         }
 
-        if(keyHandler.ePressed) {
-            System.out.println("x, y: " + x + ", " + y + "\ncamera x, y: " + cameraX + ", " + cameraY);
+        if(keyHandler.getKeyPressed(Key.COORDS)) {
+            System.out.println("x, y: " + getX() + ", " + getY() + "\ncamera x, y: " + cameraX + ", " + cameraY);
         }
 
         int targetCameraX = gamePanel.screenWidth / 2 - 24;
         int targetCameraY = gamePanel.screenHeight / 2 - 40;
 
-        if(this.x < gamePanel.screenWidth / 2 - 24) {
-            targetCameraX = this.x;
+        if(this.getX() < gamePanel.screenWidth / 2 - 24) {
+            targetCameraX = this.getX();
         }
-        else if(this.x > gamePanel.tileManager.currentMap.getMaxCol() * gamePanel.tileSize - gamePanel.screenWidth / 2 - 24) {
-            targetCameraX = this.x - gamePanel.tileManager.currentMap.getMaxCol() * gamePanel.tileSize + gamePanel.screenWidth;
+        else if(this.getX() > gamePanel.tileManager.getCurrentMap().getMaxCol() * gamePanel.tileSize - gamePanel.screenWidth / 2 - 24) {
+            targetCameraX = this.getX() - gamePanel.tileManager.getCurrentMap().getMaxCol() * gamePanel.tileSize + gamePanel.screenWidth;
         }
-        if(this.y < gamePanel.screenHeight / 2 - 40) {
-            targetCameraY = this.y;
+        if(this.getY() < gamePanel.screenHeight / 2 - 40) {
+            targetCameraY = this.getY();
         }
-        else if(this.y > gamePanel.tileManager.currentMap.getMaxRow() * gamePanel.tileSize - gamePanel.screenHeight / 2 - 40) {
-            targetCameraY = this.y - gamePanel.tileManager.currentMap.getMaxRow() * gamePanel.tileSize + gamePanel.screenHeight;
+        else if(this.getY() > gamePanel.tileManager.getCurrentMap().getMaxRow() * gamePanel.tileSize - gamePanel.screenHeight / 2 - 40) {
+            targetCameraY = this.getY() - gamePanel.tileManager.getCurrentMap().getMaxRow() * gamePanel.tileSize + gamePanel.screenHeight;
         }
 
         cameraX = targetCameraX;
@@ -120,5 +113,13 @@ public class Player extends Entity {
 
     public void setMoveSpeed(int moveSpeed) {
         this.moveSpeed = moveSpeed;
+    }
+
+    public int getCameraX() {
+        return cameraX;
+    }
+
+    public int getCameraY() {
+        return cameraY;
     }
 }

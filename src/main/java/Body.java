@@ -11,8 +11,8 @@ public class Body extends Component {private Rectangle hitbox;
     }
 
     public boolean isPositionValid() {
-        int x = this.entity.x + this.hitbox.x;
-        int y = this.entity.y + this.hitbox.y;
+        int x = this.entity.getX() + this.hitbox.x;
+        int y = this.entity.getY() + this.hitbox.y;
         if(gamePanel.tileManager.isTileSolid(x, y, this.hitbox.width - 4, this.hitbox.height - 4)) return false;
 
         for(Body body : gamePanel.bodies) {
@@ -26,10 +26,10 @@ public class Body extends Component {private Rectangle hitbox;
             return false;
         }
 
-        int x = this.entity.x + this.hitbox.x;
-        int y = this.entity.y + this.hitbox.y;
-        int otherX = other.entity.x + other.hitbox.x;
-        int otherY = other.entity.y + other.hitbox.y;
+        int x = this.entity.getX() + this.hitbox.x;
+        int y = this.entity.getY() + this.hitbox.y;
+        int otherX = other.entity.getX() + other.hitbox.x;
+        int otherY = other.entity.getY() + other.hitbox.y;
 
         return x < otherX + other.hitbox.width && otherX < x + this.hitbox.width && y < otherY + other.hitbox.height && otherY < y + this.hitbox.height;
     }

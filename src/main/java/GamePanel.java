@@ -1,12 +1,7 @@
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 
 public class GamePanel extends JPanel implements Runnable {
     public final int originalTileSize = 8;
@@ -20,14 +15,17 @@ public class GamePanel extends JPanel implements Runnable {
 
     public int FPS = 60;
 
-    private boolean printMapTransitions = false;
+    private boolean printMapTransitions = true;
     public Map beachMap, riverMap, houseSEMap, houseSWMap, houseNWMap, houseNEMap, patchMap, ruinsMap, westBeachMap, castleGateMap, eastBeachMap, deltaMap, lakeMap, easterBeachMap, towerMap;
     public ArrayList<Map> maps;
 
     public ArrayList<Sprite> sprites;
     public static ArrayList<Body> bodies;
 
-    ArrayList<Component> docComponents = new ArrayList<Component>();
+    // Instantiate game objects
+    WeaponItem sword = new WeaponItem("Sword", 100, 10);
+    HealItem bread = new HealItem("Bread", 10, 20);
+    KeyItem topaz = new KeyItem("Topaz");
     public Player doc;
 
     TileManager tileManager = new TileManager(this);
@@ -70,7 +68,7 @@ public class GamePanel extends JPanel implements Runnable {
 
         Body docBody = new Body(new Rectangle(12, 72, 24, 8), this);
 
-        doc = new Player("Doc", 480, 768, docComponents, new ArrayList<Item>(), this, keyHandler, tileManager);
+        doc = new Player("Doc", 480, 768, new ArrayList<Component>(), new ArrayList<Item>(), this, keyHandler, tileManager);
         doc.addComponent(docBody);
         doc.addComponent(docCharacter);
 
@@ -143,7 +141,7 @@ public class GamePanel extends JPanel implements Runnable {
 
         tileManager.draw(g2);
         for(Sprite sprite : sprites) {
-            if (sprite.isBg) {
+            if (sprite.isBg()) {
                 sprites.remove(sprite);
                 sprites.addFirst(sprite);
             }
@@ -286,7 +284,7 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void exitedMapVertically(Player player, Map mapFrom, Map mapTo, int x1, int x2, int previousY, int nextX, int nextY) {
-        if(tileManager.currentMap.equals(mapFrom) && player.getX() >= x1 && player.getX() <= x2 && player.getY() == previousY) {
+        if(tileManager.getCurrentMap().equals(mapFrom) && player.getX() >= x1 && player.getX() <= x2 && player.getY() == previousY) {
             if(printMapTransitions) System.out.println(mapFrom.getName() + " -> " + mapTo.getName());
             tileManager.loadMap(mapTo);
             player.setX(nextX);
@@ -295,7 +293,7 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void exitedMapHorizontally(Player player, Map mapFrom, Map mapTo, int y1, int y2, int previousX, int nextX, int nextY) {
-        if(tileManager.currentMap.equals(mapFrom) && player.getY() >= y1 && player.getY() <= y2 && player.getX() == previousX) {
+        if(tileManager.getCurrentMap().equals(mapFrom) && player.getY() >= y1 && player.getY() <= y2 && player.getX() == previousX) {
             if(printMapTransitions) System.out.println(mapFrom.getName() + " -> " + mapTo.getName());
             tileManager.loadMap(mapTo);
             player.setX(nextX);

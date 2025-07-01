@@ -3,11 +3,18 @@ import java.awt.event.KeyListener;
 
 public class KeyHandler implements KeyListener {
 
-    public boolean upPressed, downPressed, leftPressed, rightPressed, ctrlPressed, ePressed, nPressed;
+    private boolean upPressed, downPressed, leftPressed, rightPressed, ctrlPressed, ePressed, nPressed;
 
-    @Override
-    public void keyTyped(KeyEvent e) {
-
+    public boolean getKeyPressed(Key key) {
+        return switch (key) {
+            case UP -> upPressed;
+            case DOWN -> downPressed;
+            case LEFT -> leftPressed;
+            case RIGHT -> rightPressed;
+            case RUN -> ctrlPressed;
+            case COORDS -> ePressed;
+            case N -> nPressed;
+        };
     }
 
     @Override
@@ -34,5 +41,10 @@ public class KeyHandler implements KeyListener {
         if(code == KeyEvent.VK_CONTROL) ctrlPressed = false;
         if(code == KeyEvent.VK_E) ePressed = false;
         if(code == KeyEvent.VK_N) nPressed = false;
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+
     }
 }

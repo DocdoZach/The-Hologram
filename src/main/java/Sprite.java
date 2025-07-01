@@ -5,23 +5,22 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class Sprite extends Component {
-    public ArrayList<BufferedImage> images;
-    public int width, height; // Actual width * height of image(s)
-    public boolean isBg;
-    public GamePanel gamePanel;
+    private final ArrayList<BufferedImage> IMAGES;
+    private final int WIDTH, HEIGHT; // Actual width * height of image(s)
+    private boolean bg;
+    private GamePanel gamePanel;
 
-    public boolean show;
-    public BufferedImage currentImage;
-    public String direction = "down";
-    public int counter = 0;
-    public int counterMax = 10;
-    public int num = 0;
+    private boolean show;
+    private BufferedImage currentImage;
+    private int counter = 0;
+    private int counterMax = 10;
+    private int num = 0;
 
-    public Sprite(String imagePath, int width, int height, boolean isBg, GamePanel gamePanel) {
-        this.images = new ArrayList<>();
-        this.width = width;
-        this.height = height;
-        this.isBg = isBg;
+    public Sprite(String imagePath, int width, int height, boolean bg, GamePanel gamePanel) {
+        this.IMAGES = new ArrayList<>();
+        this.WIDTH = width;
+        this.HEIGHT = height;
+        this.bg = bg;
         this.show = false;
 
         try {
@@ -34,31 +33,31 @@ public class Sprite extends Component {
         gamePanel.sprites.add(this);
     }
 
-    public Sprite(ArrayList<String> imagePaths, int width, int height, boolean isBg, GamePanel gamePanel) {
-        this.images = new ArrayList<>();
+    public Sprite(ArrayList<String> imagePaths, int width, int height, boolean bg, GamePanel gamePanel) {
+        this.IMAGES = new ArrayList<>();
         try {
             for(String path : imagePaths) {
-                this.images.add(ImageIO.read(getClass().getClassLoader().getResourceAsStream(path)));
+                this.IMAGES.add(ImageIO.read(getClass().getClassLoader().getResourceAsStream(path)));
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-        this.width = width;
-        this.height = height;
-        this.isBg = isBg;
+        this.WIDTH = width;
+        this.HEIGHT = height;
+        this.bg = bg;
         this.show = false;
-        this.currentImage = images.getFirst();
+        this.currentImage = IMAGES.getFirst();
         this.gamePanel = gamePanel;
         gamePanel.sprites.add(this);
     }
 
     public void update() {
-        if(!images.isEmpty()) {
+        if(!IMAGES.isEmpty()) {
             if (counter >= counterMax) {
-                if (++num >= images.size()) num = 0;
+                if (++num >= IMAGES.size()) num = 0;
                 counter = 0;
             }
-            currentImage = images.get(num);
+            currentImage = IMAGES.get(num);
         }
     }
 
@@ -66,9 +65,33 @@ public class Sprite extends Component {
         //System.out.printf("Entity: %s, show: %s\n", this.entity, this.show);
         if (this.entity != null) {
             if (this.show) {
-                if(this.entity.equals(gamePanel.doc)) g2.drawImage(currentImage, gamePanel.doc.cameraX, gamePanel.doc.cameraY, width * gamePanel.scale, height * gamePanel.scale, null);
-                else g2.drawImage(this.currentImage, this.entity.getX() - gamePanel.doc.cameraX, this.entity.getY() - gamePanel.doc.cameraY, width * 4, height * 4, null);
+                if(this.entity.equals(gamePanel.doc)) g2.drawImage(currentImage, gamePanel.doc.getCameraX(), gamePanel.doc.getCameraY(), WIDTH * gamePanel.scale, HEIGHT * gamePanel.scale, null);
+                else g2.drawImage(this.currentImage, this.entity.getX() - gamePanel.doc.getCameraX(), this.entity.getY() - gamePanel.doc.getCameraY(), WIDTH * 4, HEIGHT * 4, null);
             }
         }
+    }
+
+    public boolean isBg() {
+        return bg;
+    }
+
+    public boolean isShow() {
+        return show;
+    }
+
+    public void setShow(boolean show) {
+        this.show = show;
+    }
+
+    public void countUp() {
+        counter++;
+    }
+
+    public int getCounterMax() {
+        return counterMax;
+    }
+
+    public void setCounterMax(int counterMax) {
+        this.counterMax = counterMax;
     }
 }
