@@ -25,7 +25,7 @@ public class TileManager {
             return true;
         }
 
-        if(y >= 1556) return false;
+        if(y >= 1600) return false;
         return this.tile[mapTile[col][row]].isHasCollision();
     }
 
@@ -136,8 +136,8 @@ public class TileManager {
                     row++;
                 }
             }
+            if (currentMap != null) currentMap.toggleMap(map);
             currentMap = map;
-            currentMap.toggleMap(map);
         } catch(Exception e) {
 
         }

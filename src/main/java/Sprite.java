@@ -66,7 +66,11 @@ public class Sprite extends Component {
         if (this.entity != null) {
             if (this.show) {
                 if(this.entity.equals(gamePanel.doc)) g2.drawImage(currentImage, gamePanel.doc.getCameraX(), gamePanel.doc.getCameraY(), WIDTH * gamePanel.scale, HEIGHT * gamePanel.scale, null);
-                else g2.drawImage(this.currentImage, this.entity.getX() - gamePanel.doc.getCameraX(), this.entity.getY() - gamePanel.doc.getCameraY(), WIDTH * 4, HEIGHT * 4, null);
+                else {
+                    int screenX = this.entity.getX() - gamePanel.doc.getX() + gamePanel.doc.getCameraX();
+                    int screenY = this.entity.getY() - gamePanel.doc.getY() + gamePanel.doc.getCameraY();
+                    g2.drawImage(this.currentImage, screenX, screenY, WIDTH * 4, HEIGHT * 4, null);
+                }
             }
         }
     }
@@ -93,5 +97,13 @@ public class Sprite extends Component {
 
     public void setCounterMax(int counterMax) {
         this.counterMax = counterMax;
+    }
+
+    public int getWIDTH() {
+        return WIDTH;
+    }
+
+    public int getHEIGHT() {
+        return HEIGHT;
     }
 }

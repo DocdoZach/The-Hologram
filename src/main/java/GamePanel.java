@@ -2,6 +2,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
+import java.util.HashSet;
 
 public class GamePanel extends JPanel implements Runnable {
     public final int originalTileSize = 8;
@@ -16,16 +18,16 @@ public class GamePanel extends JPanel implements Runnable {
     public int FPS = 60;
 
     private boolean printMapTransitions = true;
-    public Map beachMap, riverMap, houseSEMap, houseSWMap, houseNWMap, houseNEMap, patchMap, ruinsMap, westBeachMap, castleGateMap, eastBeachMap, deltaMap, lakeMap, easterBeachMap, towerMap;
-    public ArrayList<Map> maps;
+    private Map beachMap, riverMap, houseSEMap, houseSWMap, houseNWMap, houseNEMap, patchMap, ruinsMap, westBeachMap, castleGateMap, eastBeachMap, deltaMap, lakeMap, easterBeachMap, towerMap;
+    private ArrayList<Map> maps = new ArrayList<>();
 
-    public ArrayList<Sprite> sprites;
-    public static ArrayList<Body> bodies;
+    public ArrayList<Sprite> sprites = new ArrayList<>();
+    public static HashSet<Body> bodies = new HashSet<>();
 
     // Instantiate game objects
-    WeaponItem sword = new WeaponItem("Sword", 100, 10);
-    HealItem bread = new HealItem("Bread", 10, 20);
-    KeyItem topaz = new KeyItem("Topaz");
+    private WeaponItem sword = new WeaponItem("Sword", 100, 10);
+    private HealItem bread = new HealItem("Bread", 10, 20);
+    private KeyItem topaz = new KeyItem("Topaz");
     public Player doc;
 
     TileManager tileManager = new TileManager(this);
@@ -38,10 +40,6 @@ public class GamePanel extends JPanel implements Runnable {
         this.setDoubleBuffered(true);
         this.addKeyListener(keyHandler);
         this.setFocusable(true);
-
-        maps = new ArrayList<>();
-        sprites = new ArrayList<>();
-        bodies = new ArrayList<>();
 
         Character docCharacter = new Character(1, 15, 1, 1, 1);
 
@@ -140,6 +138,7 @@ public class GamePanel extends JPanel implements Runnable {
         Graphics2D g2 = (Graphics2D)g;
 
         tileManager.draw(g2);
+        sprites.sort(Comparator.comparingInt(sprite -> sprite.entity.getY() + sprite.getHEIGHT()*scale));
         for(Sprite sprite : sprites) {
             if (sprite.isBg()) {
                 sprites.remove(sprite);
@@ -157,15 +156,15 @@ public class GamePanel extends JPanel implements Runnable {
 
         // beach <-> river
         exitedMapVertically(doc, beachMap, riverMap, 0, 1600, -44, player.getX(), 1520);
-        exitedMapVertically(doc, riverMap, beachMap, 0, 1600, 1556, player.getX(), 0);
+        exitedMapVertically(doc, riverMap, beachMap, 0, 1600, 1528, player.getX(), -36);
 
         // enter/exit house SE
-        exitedMapVertically(doc, riverMap, houseSEMap, 1084, 1108, 856, 376, 528);
-        exitedMapVertically(doc, houseSEMap, riverMap, 340, 412, 560, 1096, 864);
+        exitedMapVertically(doc, riverMap, houseSEMap, 1084, 1108, 872, 376, 528);
+        exitedMapVertically(doc, houseSEMap, riverMap, 340, 412, 560, 1096, 880);
 
         // enter/exit house SW
-        exitedMapVertically(doc, riverMap, houseSWMap, 348, 372, 440, 376, 528);
-        exitedMapVertically(doc, houseSWMap, riverMap, 340, 412, 560, 360, 448);
+        exitedMapVertically(doc, riverMap, houseSWMap, 348, 372, 456, 376, 528);
+        exitedMapVertically(doc, houseSWMap, riverMap, 340, 412, 560, 360, 464);
 
         // enter/exit house NW
         exitedMapVertically(doc, riverMap, houseNWMap, 540, 564, 200, 376, 528);
@@ -177,7 +176,7 @@ public class GamePanel extends JPanel implements Runnable {
 
         // river <-> patch
         exitedMapVertically(doc, riverMap, patchMap, 0, 1600, -44, player.getX(), 1520);
-        exitedMapVertically(doc, patchMap, riverMap, 0, 1600, 1556, player.getX(), 0);
+        exitedMapVertically(doc, patchMap, riverMap, 0, 1600, 1528, player.getX(), -36);
     }
 
     public Entity mapEntity(String kind, int x, int y) {
@@ -198,8 +197,8 @@ public class GamePanel extends JPanel implements Runnable {
         Entity well = new Entity("well", x, y, new ArrayList<>());
         Sprite wellSprite = new Sprite("sprites/well.png", 56, 56, false, this);
         Body wellBody = new Body(new Rectangle(32, 96, 160, 128), this);
-        house.addComponent(wellSprite);
-        house.addComponent(wellBody);
+        well.addComponent(wellSprite);
+        well.addComponent(wellBody);
         if (kind.equals("well")) return well;
 
         return new Entity();
@@ -223,8 +222,8 @@ public class GamePanel extends JPanel implements Runnable {
         this.riverMap.getEntities().add(mapEntity("tree", 892, 376));
         this.riverMap.getEntities().add(mapEntity("tree", 24, 144));
         this.riverMap.getEntities().add(mapEntity("tree", 1356, 1060));
-        this.riverMap.getEntities().add(mapEntity("house", 1008, 704));
-        this.riverMap.getEntities().add(mapEntity("house", 272, 288));
+        this.riverMap.getEntities().add(mapEntity("house", 1008, 720));
+        this.riverMap.getEntities().add(mapEntity("house", 272, 304));
         this.riverMap.getEntities().add(mapEntity("house", 464, 48));
         this.riverMap.getEntities().add(mapEntity("house", 1328, 304));
         this.riverMap.getEntities().add(mapEntity("well", 784, 432));
