@@ -16,7 +16,10 @@ public class Body extends Component {private Rectangle hitbox;
         if(gamePanel.tileManager.isTileSolid(x, y, this.hitbox.width - 4, this.hitbox.height - 4)) return false;
 
         for(Body body : gamePanel.bodies) {
-            if(body != this && body.isCollidingWith(this)) return false;
+            if(body != this && body.isCollidingWith(this)) {
+                Xendy.printfDebug("Player colliding with " + body.entity.toString());
+                return false;
+            }
         }
         return true;
     }

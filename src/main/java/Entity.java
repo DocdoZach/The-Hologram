@@ -114,4 +114,9 @@ public class Entity {
         }
         return null;
     }
+
+    @Override
+    public String toString() {
+        return String.format("%s: %s", super.toString(), name);
+    }
 }

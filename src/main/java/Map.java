@@ -22,7 +22,7 @@ public class Map {
             GamePanel.bodies.remove(entity.getComponent(Body.class));
         }
         for(Entity entity : newMap.entities) {
-            System.out.printf("Loading entity %s with sprite %s and body %s%n", entity, entity.getComponent(Sprite.class), entity.getComponent(Body.class));
+            Xendy.printfDebug("Loading entity %s with sprite %s and body %s%n", entity, entity.getComponent(Sprite.class), entity.getComponent(Body.class));
             entity.getComponent(Sprite.class).setShow(true);
             GamePanel.bodies.add(entity.getComponent(Body.class));
         }

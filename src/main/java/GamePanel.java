@@ -6,6 +6,7 @@ import java.util.Comparator;
 import java.util.HashSet;
 
 public class GamePanel extends JPanel implements Runnable {
+    public static final boolean XENDY_DEBUG = false;
     public final int originalTileSize = 8;
     public final int scale = 4;
 
@@ -21,7 +22,7 @@ public class GamePanel extends JPanel implements Runnable {
     private Map beachMap, riverMap, houseSEMap, houseSWMap, houseNWMap, houseNEMap, patchMap, ruinsMap, westBeachMap, castleGateMap, eastBeachMap, deltaMap, lakeMap, easterBeachMap, towerMap;
     private ArrayList<Map> maps = new ArrayList<>();
 
-    public ArrayList<Sprite> sprites = new ArrayList<>();
+    public volatile ArrayList<Sprite> sprites = new ArrayList<>();
     public static HashSet<Body> bodies = new HashSet<>();
 
     // Instantiate game objects
@@ -80,6 +81,15 @@ public class GamePanel extends JPanel implements Runnable {
 
         setMaps();
         tileManager.loadMap(beachMap);
+        for(Entity entity : beachMap.getEntities()) {
+            Xendy.printfDebug("Loading initial entity %s with sprite %s and body %s%n", entity, entity.getComponent(Sprite.class), entity.getComponent(Body.class));
+            entity.getComponent(Sprite.class).setShow(true);
+            GamePanel.bodies.add(entity.getComponent(Body.class));
+        }
+        if (XENDY_DEBUG) {
+            System.out.println("ACTIVE BODIES AFTER LOADING BEACHMAP:");
+            GamePanel.bodies.forEach((e)->System.out.println(e.entity));
+        }
     }
 
     public void startGameThread() {
@@ -180,37 +190,51 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public Entity mapEntity(String kind, int x, int y) {
-        Entity tree = new Entity("tree", x, y, new ArrayList<>());
-        Sprite treeSprite = new Sprite("sprites/tree.png", 32, 40, false, this);
-        Body treeBody = new Body(new Rectangle(44, 100, 40, 60), this);
-        tree.addComponent(treeSprite);
-        tree.addComponent(treeBody);
-        if (kind.equals("tree")) return tree;
-
-        Entity house = new Entity("house", x, y, new ArrayList<>());
-        Sprite houseSprite = new Sprite("sprites/house.png", 56, 56, false, this);
-        Body houseBody = new Body(new Rectangle(32, 96, 160, 128), this);
-        house.addComponent(houseSprite);
-        house.addComponent(houseBody);
-        if (kind.equals("house")) return house;
-
-        Entity well = new Entity("well", x, y, new ArrayList<>());
-        Sprite wellSprite = new Sprite("sprites/well.png", 56, 56, false, this);
-        Body wellBody = new Body(new Rectangle(32, 96, 160, 128), this);
-        well.addComponent(wellSprite);
-        well.addComponent(wellBody);
-        if (kind.equals("well")) return well;
-
+        mapLoadStateCounter++;
+        switch (kind) {
+            case "tree" -> {
+                Entity tree = new Entity("tree", x, y, new ArrayList<>());
+                Xendy.printDebug("Creating tree with entity " + tree + " with debug " + mapLoadStateDebugger + " at " + mapLoadStateCounter);
+                Sprite treeSprite = new Sprite("sprites/tree.png", 32, 40, false, this);
+                Body treeBody = new Body(new Rectangle(44, 100, 40, 60), this);
+                tree.addComponent(treeSprite);
+                tree.addComponent(treeBody);
+                return tree;
+            }
+            case "house" -> {
+                Entity house = new Entity("house", x, y, new ArrayList<>());
+                Xendy.printDebug("Creating house with entity " + house + " with debug " + mapLoadStateDebugger + " at " + mapLoadStateCounter);
+                Sprite houseSprite = new Sprite("sprites/house.png", 56, 56, false, this);
+                Body houseBody = new Body(new Rectangle(32, 96, 160, 128), this);
+                house.addComponent(houseSprite);
+                house.addComponent(houseBody);
+                return house;
+            }
+            case "well" -> {
+                Entity well = new Entity("well", x, y, new ArrayList<>());
+                Sprite wellSprite = new Sprite("sprites/well.png", 56, 56, false, this);
+                Xendy.printDebug("Creating well with entity " + well + " with debug " + mapLoadStateDebugger + " at " + mapLoadStateCounter);
+                Body wellBody = new Body(new Rectangle(32, 96, 160, 128), this);
+                well.addComponent(wellSprite);
+                well.addComponent(wellBody);
+                return well;
+            }
+        }
         return new Entity();
     }
 
+    private String mapLoadStateDebugger = "";
+    private int mapLoadStateCounter = 0;
     public void setMaps() {
-
+        mapLoadStateDebugger = "beach";
+        mapLoadStateCounter = 0;
         this.beachMap = new Map("Beach", 50, 50, "maps/beach_map.txt", new ArrayList<>());
         this.beachMap.getEntities().add(mapEntity("tree", 788, 92));
         this.beachMap.getEntities().add(mapEntity("tree", 200, 188));
         this.maps.add(beachMap);
 
+        mapLoadStateDebugger = "river";
+        mapLoadStateCounter = 0;
         this.riverMap = new Map("River", 50, 50, "maps/river_map.txt", new ArrayList<>());
         this.riverMap.getEntities().add(mapEntity("tree", 364, 616));
         this.riverMap.getEntities().add(mapEntity("tree", 480, 848));
@@ -229,6 +253,8 @@ public class GamePanel extends JPanel implements Runnable {
         this.riverMap.getEntities().add(mapEntity("well", 784, 432));
         this.maps.add(riverMap);
 
+        mapLoadStateDebugger = "houses";
+        mapLoadStateCounter = 0;
         this.houseSEMap = new Map("House SE", 25, 20, "maps/houseSE_map.txt", new ArrayList<>());
         this.maps.add(riverMap);
 
@@ -241,6 +267,8 @@ public class GamePanel extends JPanel implements Runnable {
         this.houseNEMap = new Map("House NE", 25, 20, "maps/houseNE_map.txt", new ArrayList<>());
         this.maps.add(houseNEMap);
 
+        mapLoadStateDebugger = "patch";
+        mapLoadStateCounter = 0;
         this.patchMap = new Map("Patch", 50, 50, "maps/patch_map.txt", new ArrayList<>());
         this.patchMap.getEntities().add(mapEntity("tree", 32, 1092));
         this.patchMap.getEntities().add(mapEntity("tree", 112, 628));
@@ -250,6 +278,8 @@ public class GamePanel extends JPanel implements Runnable {
         this.patchMap.getEntities().add(mapEntity("tree", 1128, 868));
         this.maps.add(patchMap);
 
+        mapLoadStateDebugger = "other";
+        mapLoadStateCounter = 0;
         this.ruinsMap = new Map("Ruins", 50, 50, "maps/ruins_map.txt", new ArrayList<>());
         this.maps.add(ruinsMap);
 
@@ -275,10 +305,13 @@ public class GamePanel extends JPanel implements Runnable {
         this.maps.add(towerMap);
 
         for(Map map : maps) {
-            map.toggleMap(beachMap);
-        }
-        for(Entity entity : beachMap.getEntities()) {
-            bodies.add(entity.getComponent(Body.class));
+            for(Entity entity : map.getEntities()) {
+                if(entity.getComponent(Sprite.class) != null) {
+                    entity.getComponent(Sprite.class).setShow(false);
+                }
+                Xendy.printDebug("Initially removing " + entity + " with body " + entity.getComponent(Body.class));
+                GamePanel.bodies.remove(entity.getComponent(Body.class));
+            }
         }
     }
 

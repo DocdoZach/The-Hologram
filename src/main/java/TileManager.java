@@ -91,7 +91,7 @@ public class TileManager {
         int worldCol = 0;
         int worldRow = 0;
 
-        while(worldCol < mapTile[0].length && worldRow < mapTile.length) {
+        while(worldCol < mapTile.length && worldRow < mapTile[0].length) {
             int tileNum = mapTile[worldCol][worldRow];
             int x = worldCol * gamePanel.tileSize;
             int y = worldRow * gamePanel.tileSize;
