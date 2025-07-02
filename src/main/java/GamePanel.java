@@ -148,13 +148,7 @@ public class GamePanel extends JPanel implements Runnable {
         Graphics2D g2 = (Graphics2D)g;
 
         tileManager.draw(g2);
-        sprites.sort(Comparator.comparingInt(sprite -> sprite.entity.getY() + sprite.getHEIGHT()*scale));
-        for(Sprite sprite : sprites) {
-            if (sprite.isBg()) {
-                sprites.remove(sprite);
-                sprites.addFirst(sprite);
-            }
-        }
+        sprites.sort(Comparator.comparingInt(sprite -> sprite.isBg() ? Integer.MIN_VALUE : sprite.entity.getY() + sprite.getHEIGHT()*scale));
         for(Sprite sprite : sprites) {
             sprite.draw(g2);
         }
@@ -271,22 +265,29 @@ public class GamePanel extends JPanel implements Runnable {
                 well.addComponent(wellBody);
                 return well;
             }
-            case "tower" -> {
-                Entity tower = new Entity("tower", x, y, new ArrayList<>());
-                Sprite towerSprite = new Sprite("sprites/tower.png", 52, 105, false, this);
-                Xendy.printDebug("Creating tower with entity " + tower + " with debug " + mapLoadStateDebugger + " at " + mapLoadStateCounter);
+            case "tower top" -> {
+                Entity towerTop = new Entity("tower top", x, y, new ArrayList<>());
+                Sprite towerSpriteTop = new Sprite("sprites/tower_top.png", 52, 93, false, this);
+                Xendy.printDebug("Creating tower top with entity " + towerTop + " with debug " + mapLoadStateDebugger + " at " + mapLoadStateCounter);
                 Body towerBodyLeftDown = new Body(new Rectangle(0, 384, 84, 36), this);
                 Body towerBodyRightDown = new Body(new Rectangle(124, 384, 84, 36), this);
-                Body towerBodyLeftUp = new Body(new Rectangle(0, 332, 40, 48), this);
-                Body towerBodyRightUp = new Body(new Rectangle(168, 332, 40, 48), this);
+                Body towerBodyLeftUp = new Body(new Rectangle(0, 332, 56, 48), this);
+                Body towerBodyRightUp = new Body(new Rectangle(152, 332, 56, 48), this);
                 Body towerBodyMiddle = new Body(new Rectangle(40, 296, 128, 76), this);
-                tower.addComponent(towerSprite);
-                tower.addComponent(towerBodyLeftDown);
-                tower.addComponent(towerBodyRightDown);
-                tower.addComponent(towerBodyLeftUp);
-                tower.addComponent(towerBodyRightUp);
-                tower.addComponent(towerBodyMiddle);
-                return tower;
+                towerTop.addComponent(towerSpriteTop);
+                towerTop.addComponent(towerBodyLeftDown);
+                towerTop.addComponent(towerBodyRightDown);
+                towerTop.addComponent(towerBodyLeftUp);
+                towerTop.addComponent(towerBodyRightUp);
+                towerTop.addComponent(towerBodyMiddle);
+                return towerTop;
+            }
+            case "tower bottom" -> {
+                Entity towerBottom = new Entity("tower top", x, y, new ArrayList<>());
+                Sprite towerSpriteBottom = new Sprite("sprites/tower_bottom.png", 52, 12, true, this);
+                Xendy.printDebug("Creating tower top with entity " + towerBottom + " with debug " + mapLoadStateDebugger + " at " + mapLoadStateCounter);
+                towerBottom.addComponent(towerSpriteBottom);
+                return towerBottom;
             }
         }
         return new Entity();
@@ -415,7 +416,8 @@ public class GamePanel extends JPanel implements Runnable {
         this.towerMap.getEntities().add(mapEntity("tree", 216, 496));
         this.towerMap.getEntities().add(mapEntity("tree", 1096, 668));
         this.towerMap.getEntities().add(mapEntity("tree", 392, 1316));
-        this.towerMap.getEntities().add(mapEntity("tower", 648, 588));
+        this.towerMap.getEntities().add(mapEntity("tower top", 648, 588));
+        this.towerMap.getEntities().add(mapEntity("tower bottom", 648, 960));
         this.maps.add(towerMap);
 
         for(Map map : maps) {
