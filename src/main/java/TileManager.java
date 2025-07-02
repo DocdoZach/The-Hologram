@@ -73,7 +73,7 @@ public class TileManager {
             tile[9] = new TileType("planks", null, false);
             tile[9].setTileImage(ImageIO.read(getClass().getResourceAsStream("tiles/planks_tile.png")));
 
-            tile[10] = new TileType("stone", null, true);
+            tile[10] = new TileType("stone", null, false);
             tile[10].setTileImage(ImageIO.read(getClass().getResourceAsStream("tiles/stone_tile.png")));
 
             tile[11] = new TileType("stone_brick", null, true);

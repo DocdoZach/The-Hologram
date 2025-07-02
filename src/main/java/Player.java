@@ -6,7 +6,6 @@ public class Player extends Entity {
     private int moveSpeed;
     private ArrayList<Item> inventory = new ArrayList<>();
     private int cameraX, cameraY;
-    private boolean ePressedPrev;
 
     public Player(String name, int x, int y, ArrayList<Component> components, ArrayList<Item> inventory, GamePanel gamePanel, KeyHandler keyHandler, TileManager tileManager) {
         super(name, x, y, components);

@@ -187,6 +187,58 @@ public class GamePanel extends JPanel implements Runnable {
         // river <-> patch
         exitedMapVertically(doc, riverMap, patchMap, 0, 1600, -44, player.getX(), 1520);
         exitedMapVertically(doc, patchMap, riverMap, 0, 1600, 1528, player.getX(), -36);
+
+        // river <-> ruins
+        exitedMapHorizontally(doc, riverMap, ruinsMap, 0, 1600, -12, 1556, player.getY());
+        exitedMapHorizontally(doc, ruinsMap, riverMap, 0, 1600, 1564, -8, player.getY());
+
+        // beach <-> west beach
+        exitedMapHorizontally(doc, beachMap, westBeachMap, 0, 1600, -12, 1556, player.getY());
+        exitedMapHorizontally(doc, westBeachMap, beachMap, 0, 1600, 1564, -8, player.getY());
+
+        // ruins <-> west beach
+        exitedMapVertically(doc, ruinsMap, westBeachMap, 0, 1600, 1528, player.getX(), -36);
+        exitedMapVertically(doc, westBeachMap, ruinsMap, 0, 1600, -44, player.getX(), 1520);
+
+        // patch <-> castle gate
+        exitedMapHorizontally(doc, patchMap, castleGateMap, 0, 1600, -12, 1556, player.getY());
+        exitedMapHorizontally(doc, castleGateMap, patchMap, 0, 1600, 1564, -8, player.getY());
+
+        // ruins <-> castle gate
+        exitedMapVertically(doc, ruinsMap, castleGateMap, 0, 1600, -44, player.getX(), 1520);
+        exitedMapVertically(doc, castleGateMap, ruinsMap, 0, 1600, 1528, player.getX(), -36);
+
+        // beach <-> east beach
+        exitedMapHorizontally(doc, eastBeachMap, beachMap, 0, 1600, -12, 1556, player.getY());
+        exitedMapHorizontally(doc, beachMap, eastBeachMap, 0, 1600, 1564, -8, player.getY());
+
+        // east beach <-> delta
+        exitedMapVertically(doc, eastBeachMap, deltaMap, 0, 1600, -44, player.getX(), 1520);
+        exitedMapVertically(doc, deltaMap, eastBeachMap, 0, 1600, 1528, player.getX(), -36);
+
+        // river <-> delta
+        exitedMapHorizontally(doc, deltaMap, riverMap, 0, 1600, -12, 1556, player.getY());
+        exitedMapHorizontally(doc, riverMap, deltaMap, 0, 1600, 1564, -8, player.getY());
+
+        // patch <-> lake
+        exitedMapHorizontally(doc, lakeMap, patchMap, 0, 1600, -12, 1556, player.getY());
+        exitedMapHorizontally(doc, patchMap, lakeMap, 0, 1600, 1564, -8, player.getY());
+
+        // delta <-> lake
+        exitedMapVertically(doc, deltaMap, lakeMap, 0, 1600, -44, player.getX(), 1520);
+        exitedMapVertically(doc, lakeMap, deltaMap, 0, 1600, 1528, player.getX(), -36);
+
+        // east beach <-> easter beach
+        exitedMapHorizontally(doc, easterBeachMap, eastBeachMap, 0, 1600, -12, 1556, player.getY());
+        exitedMapHorizontally(doc, eastBeachMap, easterBeachMap, 0, 1600, 1564, -8, player.getY());
+
+        // delta <-> tower
+        exitedMapHorizontally(doc, towerMap, deltaMap, 0, 1600, -12, 1556, player.getY());
+        exitedMapHorizontally(doc, deltaMap, towerMap, 0, 1600, 1564, -8, player.getY());
+
+        // easter beach <-> tower
+        exitedMapVertically(doc, easterBeachMap, towerMap, 0, 1600, -44, player.getX(), 1520);
+        exitedMapVertically(doc, towerMap, easterBeachMap, 0, 1600, 1528, player.getX(), -36);
     }
 
     public Entity mapEntity(String kind, int x, int y) {
@@ -278,30 +330,74 @@ public class GamePanel extends JPanel implements Runnable {
         this.patchMap.getEntities().add(mapEntity("tree", 1128, 868));
         this.maps.add(patchMap);
 
-        mapLoadStateDebugger = "other";
+        mapLoadStateDebugger = "ruins";
         mapLoadStateCounter = 0;
         this.ruinsMap = new Map("Ruins", 50, 50, "maps/ruins_map.txt", new ArrayList<>());
+        this.ruinsMap.getEntities().add(mapEntity("tree", 1336, 628));
+        this.ruinsMap.getEntities().add(mapEntity("tree", 1112, 256));
+        this.ruinsMap.getEntities().add(mapEntity("tree", 500, 168));
+        this.ruinsMap.getEntities().add(mapEntity("tree", 180, 852));
+        this.ruinsMap.getEntities().add(mapEntity("tree", 306, 548));
+        this.ruinsMap.getEntities().add(mapEntity("tree", 884, 1016));
+        this.ruinsMap.getEntities().add(mapEntity("tree", 1448, 1340));
         this.maps.add(ruinsMap);
 
+        mapLoadStateDebugger = "west beach";
+        mapLoadStateCounter = 0;
         this.westBeachMap = new Map("West Beach", 50, 50, "maps/west_beach_map.txt", new ArrayList<>());
+        this.westBeachMap.getEntities().add(mapEntity("tree", 1144, 48));
         this.maps.add(westBeachMap);
 
+        mapLoadStateDebugger = "castle gate";
+        mapLoadStateCounter = 0;
         this.castleGateMap = new Map("Castle Gate", 50, 50, "maps/castle_gate_map.txt", new ArrayList<>());
+        this.castleGateMap.getEntities().add(mapEntity("tree", 108, 1188));
+        this.castleGateMap.getEntities().add(mapEntity("tree", 452, 952));
+        this.castleGateMap.getEntities().add(mapEntity("tree", 820, 1366));
+        this.castleGateMap.getEntities().add(mapEntity("tree", 1348, 1300));
         this.maps.add(castleGateMap);
 
+        mapLoadStateDebugger = "east beach";
+        mapLoadStateCounter = 0;
         this.eastBeachMap = new Map("East Beach", 50, 50, "maps/east_beach_map.txt", new ArrayList<>());
+        this.eastBeachMap.getEntities().add(mapEntity("tree", 132, 176));
+        this.eastBeachMap.getEntities().add(mapEntity("tree", 1296, 308));
+        this.eastBeachMap.getEntities().add(mapEntity("tree", 448, 588));
         this.maps.add(eastBeachMap);
 
+        mapLoadStateDebugger = "delta";
+        mapLoadStateCounter = 0;
         this.deltaMap = new Map("Delta", 50, 50, "maps/delta_map.txt", new ArrayList<>());
+        this.deltaMap.getEntities().add(mapEntity("tree", 788, 192));
+        this.deltaMap.getEntities().add(mapEntity("tree", 1304, 596));
+        this.deltaMap.getEntities().add(mapEntity("tree", 236, 684));
+        this.deltaMap.getEntities().add(mapEntity("tree", 632, 1200));
+        this.deltaMap.getEntities().add(mapEntity("tree", 1120, 1196));
         this.maps.add(deltaMap);
 
+        mapLoadStateDebugger = "lake";
+        mapLoadStateCounter = 0;
         this.lakeMap = new Map("Lake", 50, 50, "maps/lake_map.txt", new ArrayList<>());
+        this.lakeMap.getEntities().add(mapEntity("tree", 516, 1132));
+        this.lakeMap.getEntities().add(mapEntity("tree", 1244, 128));
+        this.lakeMap.getEntities().add(mapEntity("tree", 748, 236));
+        this.lakeMap.getEntities().add(mapEntity("tree", 144, 136));
+        this.lakeMap.getEntities().add(mapEntity("tree", 116, 988));
         this.maps.add(lakeMap);
 
+        mapLoadStateDebugger = "easter beach";
+        mapLoadStateCounter = 0;
         this.easterBeachMap = new Map("Easter Beach", 50, 50, "maps/easter_beach_map.txt", new ArrayList<>());
+        this.lakeMap.getEntities().add(mapEntity("tree", 984, 120));
         this.maps.add(easterBeachMap);
 
+        mapLoadStateDebugger = "tower";
+        mapLoadStateCounter = 0;
         this.towerMap = new Map("Tower", 50, 50, "maps/tower_map.txt", new ArrayList<>());
+        this.towerMap.getEntities().add(mapEntity("tree", 1304, 88));
+        this.towerMap.getEntities().add(mapEntity("tree", 216, 496));
+        this.towerMap.getEntities().add(mapEntity("tree", 1096, 668));
+        this.towerMap.getEntities().add(mapEntity("tree", 392, 1316));
         this.maps.add(towerMap);
 
         for(Map map : maps) {
