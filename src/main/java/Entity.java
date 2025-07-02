@@ -121,7 +121,7 @@ public class Entity {
     }
 
     public <T extends Component> ArrayList<T> getComponents(Class<T> kind) {
-        ArrayList<Component> componentsOut = components;
+        ArrayList<Component> componentsOut = (ArrayList<Component>) components.clone();
         componentsOut.removeIf(component -> !kind.isInstance(component));
         return (ArrayList<T>) componentsOut;
     }
