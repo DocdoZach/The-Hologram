@@ -323,9 +323,9 @@ public class GamePanel extends JPanel implements Runnable {
         mapLoadStateCounter = 0;
         this.patchMap = new Map("Patch", 50, 50, "maps/patch_map.txt", new ArrayList<>());
         this.patchMap.getEntities().add(mapEntity("tree", 32, 1092));
-        this.patchMap.getEntities().add(mapEntity("tree", 112, 628));
+        this.patchMap.getEntities().add(mapEntity("tree", 112, 700));
         this.patchMap.getEntities().add(mapEntity("tree", 316, 1124));
-        this.patchMap.getEntities().add(mapEntity("tree", 340, 280));
+        this.patchMap.getEntities().add(mapEntity("tree", 400, 316));
         this.patchMap.getEntities().add(mapEntity("tree", 948, 540));
         this.patchMap.getEntities().add(mapEntity("tree", 1128, 868));
         this.maps.add(patchMap);
