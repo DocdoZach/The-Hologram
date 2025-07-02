@@ -6,7 +6,7 @@ import java.util.Comparator;
 import java.util.HashSet;
 
 public class GamePanel extends JPanel implements Runnable {
-    public static final boolean XENDY_DEBUG = false;
+    public static final boolean XENDY_DEBUG = true;
     public final int originalTileSize = 8;
     public final int scale = 4;
 
@@ -271,6 +271,23 @@ public class GamePanel extends JPanel implements Runnable {
                 well.addComponent(wellBody);
                 return well;
             }
+            case "tower" -> {
+                Entity tower = new Entity("tower", x, y, new ArrayList<>());
+                Sprite towerSprite = new Sprite("sprites/tower.png", 52, 105, false, this);
+                Xendy.printDebug("Creating tower with entity " + tower + " with debug " + mapLoadStateDebugger + " at " + mapLoadStateCounter);
+                Body towerBodyLeftDown = new Body(new Rectangle(0, 384, 84, 36), this);
+                Body towerBodyRightDown = new Body(new Rectangle(124, 384, 84, 36), this);
+                Body towerBodyLeftUp = new Body(new Rectangle(0, 332, 40, 48), this);
+                Body towerBodyRightUp = new Body(new Rectangle(168, 332, 40, 48), this);
+                Body towerBodyMiddle = new Body(new Rectangle(40, 296, 128, 76), this);
+                tower.addComponent(towerSprite);
+                tower.addComponent(towerBodyLeftDown);
+                tower.addComponent(towerBodyRightDown);
+                tower.addComponent(towerBodyLeftUp);
+                tower.addComponent(towerBodyRightUp);
+                tower.addComponent(towerBodyMiddle);
+                return tower;
+            }
         }
         return new Entity();
     }
@@ -398,6 +415,7 @@ public class GamePanel extends JPanel implements Runnable {
         this.towerMap.getEntities().add(mapEntity("tree", 216, 496));
         this.towerMap.getEntities().add(mapEntity("tree", 1096, 668));
         this.towerMap.getEntities().add(mapEntity("tree", 392, 1316));
+        this.towerMap.getEntities().add(mapEntity("tower", 648, 588));
         this.maps.add(towerMap);
 
         for(Map map : maps) {
@@ -406,7 +424,9 @@ public class GamePanel extends JPanel implements Runnable {
                     entity.getComponent(Sprite.class).setShow(false);
                 }
                 Xendy.printDebug("Initially removing " + entity + " with body " + entity.getComponent(Body.class));
-                GamePanel.bodies.remove(entity.getComponent(Body.class));
+                for(Component component : entity.getComponents()) {
+                    GamePanel.bodies.remove(component);
+                }
             }
         }
     }

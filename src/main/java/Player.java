@@ -65,6 +65,9 @@ public class Player extends Entity {
 
         if(keyHandler.getKeyPressed(Key.COORDS)) {
             System.out.println("x, y: " + getX() + ", " + getY() + "\ncamera x, y: " + cameraX + ", " + cameraY);
+            for(Sprite sprite : gamePanel.sprites) {
+                if(sprite.isShow()) System.out.println("Sprite of " + sprite.entity.getName() + " is showing");
+            }
         }
 
         int targetCameraX = gamePanel.screenWidth / 2 - 24;

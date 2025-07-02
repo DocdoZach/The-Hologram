@@ -20,11 +20,14 @@ public class Map {
                 entity.getComponent(Sprite.class).setShow(false);
             }
             GamePanel.bodies.remove(entity.getComponent(Body.class));
+            do {
+                GamePanel.bodies.remove(entity.getComponent(Body.class));
+            } while(GamePanel.bodies.contains(entity.getComponent(Body.class)));
         }
         for(Entity entity : newMap.entities) {
             Xendy.printfDebug("Loading entity %s with sprite %s and body %s%n", entity, entity.getComponent(Sprite.class), entity.getComponent(Body.class));
             entity.getComponent(Sprite.class).setShow(true);
-            GamePanel.bodies.add(entity.getComponent(Body.class));
+            GamePanel.bodies.addAll(entity.getComponents(Body.class)); // this line prevents entity sprites from being undrawn after map toggle ????
         }
     }
     public String getName() {
