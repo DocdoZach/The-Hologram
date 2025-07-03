@@ -153,6 +153,9 @@ public class GamePanel extends JPanel implements Runnable {
             sprite.draw(g2);
         }
 
+        g.setFont(new Font("Arial", Font.BOLD, 24));
+        g.drawString("X, Y: " + (doc.getX() / 4 + 3) + ", " + (doc.getY() / 4 + 11), 10, 630);
+
         g2.dispose();
     }
 
