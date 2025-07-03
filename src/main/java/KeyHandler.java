@@ -12,7 +12,7 @@ public class KeyHandler implements KeyListener {
             case LEFT -> leftPressed;
             case RIGHT -> rightPressed;
             case RUN -> ctrlPressed;
-            case COORDS -> ePressed;
+            case DEBUGMENU -> ePressed;
             case N -> nPressed;
         };
     }

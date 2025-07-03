@@ -1,4 +1,4 @@
 public enum Key {
-    UP, DOWN, LEFT, RIGHT, RUN, COORDS, N
+    UP, DOWN, LEFT, RIGHT, RUN, DEBUGMENU, N
 
 }

@@ -25,6 +25,8 @@ public class GamePanel extends JPanel implements Runnable {
     public volatile ArrayList<Sprite> sprites = new ArrayList<>();
     public static HashSet<Body> bodies = new HashSet<>();
 
+    public boolean debugMenu = false;
+
     // Instantiate game objects
     private WeaponItem sword = new WeaponItem("Sword", 100, 10);
     private HealItem bread = new HealItem("Bread", 10, 20);
@@ -154,7 +156,7 @@ public class GamePanel extends JPanel implements Runnable {
         }
 
         g.setFont(new Font("Arial", Font.BOLD, 24));
-        g.drawString("X, Y: " + (doc.getX() / 4 + 3) + ", " + (doc.getY() / 4 + 11), 10, 630);
+        if(debugMenu) g.drawString("X, Y: " + (doc.getX() / 4 + 3) + ", " + (doc.getY() / 4 + 11), 10, 630);
 
         g2.dispose();
     }

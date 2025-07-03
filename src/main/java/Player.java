@@ -6,6 +6,7 @@ public class Player extends Entity {
     private int moveSpeed;
     private ArrayList<Item> inventory = new ArrayList<>();
     private int cameraX, cameraY;
+    boolean eTapped = false;
 
     public Player(String name, int x, int y, ArrayList<Component> components, ArrayList<Item> inventory, GamePanel gamePanel, KeyHandler keyHandler, TileManager tileManager) {
         super(name, x, y, components);
@@ -63,11 +64,15 @@ public class Player extends Entity {
             getComponent(MultiSprite.class).getCurrentSprite().setCounterMax(5);
         }
 
-        if(keyHandler.getKeyPressed(Key.COORDS)) {
-            System.out.println("x, y: " + getX() + ", " + getY() + "\ncamera x, y: " + cameraX + ", " + cameraY);
-            for(Sprite sprite : gamePanel.sprites) {
-                if(sprite.isShow()) System.out.println("Sprite of " + sprite.entity.getName() + " is showing");
+        if (keyHandler.getKeyPressed(Key.DEBUGMENU)) {
+            if (!eTapped) {
+                gamePanel.debugMenu = !gamePanel.debugMenu;
+                eTapped = true;
             }
+        } else {
+            if (eTapped) {
+            }
+            eTapped = false;
         }
 
         int targetCameraX = gamePanel.screenWidth / 2 - 24;
