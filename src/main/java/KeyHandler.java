@@ -3,7 +3,7 @@ import java.awt.event.KeyListener;
 
 public class KeyHandler implements KeyListener {
 
-    private boolean upPressed, downPressed, leftPressed, rightPressed, ctrlPressed, ePressed, nPressed;
+    private boolean upPressed, downPressed, leftPressed, rightPressed, shiftPressed, ePressed, nPressed;
 
     public boolean getKeyPressed(Key key) {
         return switch (key) {
@@ -11,7 +11,7 @@ public class KeyHandler implements KeyListener {
             case DOWN -> downPressed;
             case LEFT -> leftPressed;
             case RIGHT -> rightPressed;
-            case RUN -> ctrlPressed;
+            case RUN -> shiftPressed;
             case DEBUGMENU -> ePressed;
             case N -> nPressed;
         };
@@ -25,7 +25,7 @@ public class KeyHandler implements KeyListener {
         if(code == KeyEvent.VK_S || code == KeyEvent.VK_DOWN) downPressed = true;
         if(code == KeyEvent.VK_A || code == KeyEvent.VK_LEFT) leftPressed = true;
         if(code == KeyEvent.VK_D || code == KeyEvent.VK_RIGHT) rightPressed = true;
-        if(code == KeyEvent.VK_CONTROL) ctrlPressed = true;
+        if(code == KeyEvent.VK_SHIFT) shiftPressed = true;
         if(code == KeyEvent.VK_E) ePressed = true;
         if(code == KeyEvent.VK_N) nPressed = true;
     }
@@ -38,7 +38,7 @@ public class KeyHandler implements KeyListener {
         if(code == KeyEvent.VK_S || code == KeyEvent.VK_DOWN) downPressed = false;
         if(code == KeyEvent.VK_A || code == KeyEvent.VK_LEFT) leftPressed = false;
         if(code == KeyEvent.VK_D || code == KeyEvent.VK_RIGHT) rightPressed = false;
-        if(code == KeyEvent.VK_CONTROL) ctrlPressed = false;
+        if(code == KeyEvent.VK_SHIFT) shiftPressed = false;
         if(code == KeyEvent.VK_E) ePressed = false;
         if(code == KeyEvent.VK_N) nPressed = false;
     }

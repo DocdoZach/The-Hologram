@@ -6,7 +6,7 @@ import java.util.Comparator;
 import java.util.HashSet;
 
 public class GamePanel extends JPanel implements Runnable {
-    public static final boolean XENDY_DEBUG = true;
+    public static final boolean XENDY_DEBUG = false;
     public final int originalTileSize = 8;
     public final int scale = 4;
 
@@ -18,7 +18,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     public int FPS = 60;
 
-    private boolean printMapTransitions = true;
+    private boolean printMapTransitions = false;
     private Map beachMap, riverMap, houseSEMap, houseSWMap, houseNWMap, houseNEMap, patchMap, ruinsMap, westBeachMap, castleGateMap, eastBeachMap, deltaMap, lakeMap, easterBeachMap, towerMap;
     private ArrayList<Map> maps = new ArrayList<>();
 
@@ -156,7 +156,7 @@ public class GamePanel extends JPanel implements Runnable {
         }
 
         g.setFont(new Font("Arial", Font.BOLD, 24));
-        if(debugMenu) g.drawString("X, Y: " + (doc.getX() / 4 + 3) + ", " + (doc.getY() / 4 + 11), 10, 630);
+        if(debugMenu) g.drawString("X, Y: " + (doc.getX() / 4 + 3) + ", " + (doc.getY() / 4 + 11) + " (" + tileManager.getCurrentMap().getName() + ")", 10, 630);
 
         g2.dispose();
     }
@@ -300,6 +300,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     private String mapLoadStateDebugger = "";
     private int mapLoadStateCounter = 0;
+
     public void setMaps() {
         mapLoadStateDebugger = "beach";
         mapLoadStateCounter = 0;
@@ -401,7 +402,7 @@ public class GamePanel extends JPanel implements Runnable {
         mapLoadStateDebugger = "lake";
         mapLoadStateCounter = 0;
         this.lakeMap = new Map("Lake", 50, 50, "maps/lake_map.txt", new ArrayList<>());
-        this.lakeMap.getEntities().add(mapEntity("tree", 516, 1132));
+        this.lakeMap.getEntities().add(mapEntity("tree", 400, 1196));
         this.lakeMap.getEntities().add(mapEntity("tree", 1244, 128));
         this.lakeMap.getEntities().add(mapEntity("tree", 748, 236));
         this.lakeMap.getEntities().add(mapEntity("tree", 144, 136));
@@ -411,7 +412,8 @@ public class GamePanel extends JPanel implements Runnable {
         mapLoadStateDebugger = "easter beach";
         mapLoadStateCounter = 0;
         this.easterBeachMap = new Map("Easter Beach", 50, 50, "maps/easter_beach_map.txt", new ArrayList<>());
-        this.lakeMap.getEntities().add(mapEntity("tree", 984, 120));
+        this.easterBeachMap.getEntities().add(mapEntity("tree", 984, 120));
+        this.easterBeachMap.getEntities().add(mapEntity("tree", 424, 80));
         this.maps.add(easterBeachMap);
 
         mapLoadStateDebugger = "tower";
@@ -421,6 +423,8 @@ public class GamePanel extends JPanel implements Runnable {
         this.towerMap.getEntities().add(mapEntity("tree", 216, 496));
         this.towerMap.getEntities().add(mapEntity("tree", 1096, 668));
         this.towerMap.getEntities().add(mapEntity("tree", 392, 1316));
+        this.towerMap.getEntities().add(mapEntity("tree", 588, 348));
+        this.towerMap.getEntities().add(mapEntity("tree", 96, 44));
         this.towerMap.getEntities().add(mapEntity("tower top", 648, 588));
         this.towerMap.getEntities().add(mapEntity("tower bottom", 648, 960));
         this.maps.add(towerMap);
