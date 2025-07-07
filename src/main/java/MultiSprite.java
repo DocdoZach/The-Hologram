@@ -22,7 +22,15 @@ public class MultiSprite extends Component {
         sprites.put(key, sprite);
     }
 
+    public HashMap<String, Sprite> getSprites() {
+        return this.sprites;
+    }
+
     public Sprite getCurrentSprite() {
         return currentSprite;
+    }
+
+    public boolean checkCurrentSprite(String key) {
+        return this.entity.getComponent(MultiSprite.class).getCurrentSprite().equals(this.entity.getComponent(MultiSprite.class).getSprites().get(key));
     }
 }

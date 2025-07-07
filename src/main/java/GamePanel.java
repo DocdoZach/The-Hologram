@@ -6,7 +6,7 @@ import java.util.Comparator;
 import java.util.HashSet;
 
 public class GamePanel extends JPanel implements Runnable {
-    public static final boolean XENDY_DEBUG = false;
+    public static final boolean XENDY_DEBUG = true;
     public final int originalTileSize = 8;
     public final int scale = 4;
 
@@ -239,12 +239,17 @@ public class GamePanel extends JPanel implements Runnable {
         exitedMapVertically(doc, easterBeachMap, towerMap, 0, 1600, -44, player.getX(), 1520);
         exitedMapVertically(doc, towerMap, easterBeachMap, 0, 1600, 1528, player.getX(), -36);
     }
+/*
+    public void checkEntityInteractions(Player player) {
+        if (tileManager.getCurrentMap().equals(this.riverMap) &&
+                player.getComponent(Body.class).isCollidingWith(tileManager.getCurrentMap().getEntities().get()))
+    }*/
 
     public Entity mapEntity(String kind, int x, int y) {
         mapLoadStateCounter++;
         switch (kind) {
             case "tree" -> {
-                Entity tree = new Entity("tree", x, y, new ArrayList<>());
+                Entity tree = new Entity("tree", x, y);
                 Xendy.printDebug("Creating tree with entity " + tree + " with debug " + mapLoadStateDebugger + " at " + mapLoadStateCounter);
                 Sprite treeSprite = new Sprite("sprites/tree.png", 32, 40, false, this);
                 Body treeBody = new Body(new Rectangle(44, 100, 40, 60), this);
@@ -253,7 +258,7 @@ public class GamePanel extends JPanel implements Runnable {
                 return tree;
             }
             case "house" -> {
-                Entity house = new Entity("house", x, y, new ArrayList<>());
+                Entity house = new Entity("house", x, y);
                 Xendy.printDebug("Creating house with entity " + house + " with debug " + mapLoadStateDebugger + " at " + mapLoadStateCounter);
                 Sprite houseSprite = new Sprite("sprites/house.png", 56, 56, false, this);
                 Body houseBody = new Body(new Rectangle(32, 96, 160, 128), this);
@@ -262,7 +267,7 @@ public class GamePanel extends JPanel implements Runnable {
                 return house;
             }
             case "well" -> {
-                Entity well = new Entity("well", x, y, new ArrayList<>());
+                Entity well = new Entity("well", x, y);
                 Sprite wellSprite = new Sprite("sprites/well.png", 56, 56, false, this);
                 Xendy.printDebug("Creating well with entity " + well + " with debug " + mapLoadStateDebugger + " at " + mapLoadStateCounter);
                 Body wellBody = new Body(new Rectangle(32, 96, 160, 128), this);
@@ -270,8 +275,17 @@ public class GamePanel extends JPanel implements Runnable {
                 well.addComponent(wellBody);
                 return well;
             }
+            case "Allium" -> {
+                Entity allium = new Entity("Allium", x, y);
+                Sprite alliumSprite = new Sprite("sprites/allium.png", 12, 20, false, this);
+                Xendy.printDebug("Creating Allium with entity " + allium + " with debug " + mapLoadStateDebugger + " at " + mapLoadStateCounter);
+                Body alliumBody = new Body(new Rectangle(0, 32, 48, 48), this);
+                allium.addComponent(alliumSprite);
+                allium.addComponent(alliumBody);
+                return allium;
+            }
             case "tower top" -> {
-                Entity towerTop = new Entity("tower top", x, y, new ArrayList<>());
+                Entity towerTop = new Entity("tower top", x, y);
                 Sprite towerSpriteTop = new Sprite("sprites/tower_top.png", 52, 93, false, this);
                 Xendy.printDebug("Creating tower top with entity " + towerTop + " with debug " + mapLoadStateDebugger + " at " + mapLoadStateCounter);
                 Body towerBodyLeftDown = new Body(new Rectangle(0, 384, 84, 36), this);
@@ -288,7 +302,7 @@ public class GamePanel extends JPanel implements Runnable {
                 return towerTop;
             }
             case "tower bottom" -> {
-                Entity towerBottom = new Entity("tower top", x, y, new ArrayList<>());
+                Entity towerBottom = new Entity("tower top", x, y);
                 Sprite towerSpriteBottom = new Sprite("sprites/tower_bottom.png", 52, 12, true, this);
                 Xendy.printDebug("Creating tower top with entity " + towerBottom + " with debug " + mapLoadStateDebugger + " at " + mapLoadStateCounter);
                 towerBottom.addComponent(towerSpriteBottom);
@@ -327,6 +341,7 @@ public class GamePanel extends JPanel implements Runnable {
         this.riverMap.getEntities().add(mapEntity("house", 464, 48));
         this.riverMap.getEntities().add(mapEntity("house", 1328, 304));
         this.riverMap.getEntities().add(mapEntity("well", 784, 432));
+        this.riverMap.getEntities().add(mapEntity("Allium", 900, 800));
         this.maps.add(riverMap);
 
         mapLoadStateDebugger = "houses";
