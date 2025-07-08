@@ -4,6 +4,6 @@
 # Controls
 WASD/Arrow Keys: move around
 
-CTRL: speed up
+Shift: speed up
 
 E: print player’s coordinates
