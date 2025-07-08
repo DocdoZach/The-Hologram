@@ -88,6 +88,9 @@ public class TileManager {
             tile[14] = new TileType("red_flower", null, false);
             tile[14].setTileImage(ImageIO.read(getClass().getResourceAsStream("tiles/red_flower_tile.png")));
 
+            tile[15] = new TileType("pink_flower", null, false);
+            tile[15].setTileImage(ImageIO.read(getClass().getResourceAsStream("tiles/pink_flower_tile.png")));
+
         } catch(IOException e) {
             e.printStackTrace();
         }
