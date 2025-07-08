@@ -19,7 +19,11 @@ public class GamePanel extends JPanel implements Runnable {
     public int FPS = 60;
 
     private boolean printMapTransitions = false;
-    private Map beachMap, riverMap, houseSEMap, houseSWMap, houseNWMap, houseNEMap, patchMap, ruinsMap, westBeachMap, castleGateMap, eastBeachMap, deltaMap, lakeMap, easterBeachMap, towerMap;
+    private Map beachMap, riverMap, houseSEMap, houseSWMap,
+            houseNWMap, houseNEMap, patchMap, ruinsMap,
+            westBeachMap, castleGateMap, eastBeachMap,
+            deltaMap, lakeMap, easterBeachMap, towerMap,
+            westerBeachMap, shrineMap;
     private ArrayList<Map> maps = new ArrayList<>();
 
     public volatile ArrayList<Sprite> sprites = new ArrayList<>();
@@ -238,6 +242,18 @@ public class GamePanel extends JPanel implements Runnable {
         // easter beach <-> tower
         exitedMapVertically(doc, easterBeachMap, towerMap, 0, 1600, -44, player.getX(), 1520);
         exitedMapVertically(doc, towerMap, easterBeachMap, 0, 1600, 1528, player.getX(), -36);
+
+        // wester beach <-> west beach
+        exitedMapHorizontally(doc, westBeachMap, westerBeachMap, 0, 1600, -12, 1556, player.getY());
+        exitedMapHorizontally(doc, westerBeachMap, westBeachMap, 0, 1600, 1564, -8, player.getY());
+
+        // wester beach <-> shrine
+        exitedMapVertically(doc, westerBeachMap, shrineMap, 0, 1600, -44, player.getX(), 1520);
+        exitedMapVertically(doc, shrineMap, westerBeachMap, 0, 1600, 1528, player.getX(), -36);
+
+        // shrine <-> ruins
+        exitedMapHorizontally(doc, ruinsMap, shrineMap, 0, 1600, -12, 1556, player.getY());
+        exitedMapHorizontally(doc, shrineMap, ruinsMap, 0, 1600, 1564, -8, player.getY());
     }
 /*
     public void checkEntityInteractions(Player player) {
@@ -307,6 +323,15 @@ public class GamePanel extends JPanel implements Runnable {
                 Xendy.printDebug("Creating tower top with entity " + towerBottom + " with debug " + mapLoadStateDebugger + " at " + mapLoadStateCounter);
                 towerBottom.addComponent(towerSpriteBottom);
                 return towerBottom;
+            }
+            case "shrine" -> {
+                Entity shrine = new Entity("shrine", x, y);
+                Sprite shrineSprite = new Sprite("sprites/shrine.png", 18, 28, false, this);
+                Xendy.printDebug("Creating shrine with entity " + shrine + " with debug " + mapLoadStateDebugger + " at " + mapLoadStateCounter);
+                Body shrineBody = new Body(new Rectangle(0, 76, 72, 36), this);
+                shrine.addComponent(shrineSprite);
+                shrine.addComponent(shrineBody);
+                return shrine;
             }
         }
         return new Entity();
@@ -443,6 +468,26 @@ public class GamePanel extends JPanel implements Runnable {
         this.towerMap.getEntities().add(mapEntity("tower top", 648, 588));
         this.towerMap.getEntities().add(mapEntity("tower bottom", 648, 960));
         this.maps.add(towerMap);
+
+        mapLoadStateDebugger = "wester beach";
+        mapLoadStateCounter = 0;
+        this.westerBeachMap = new Map("Wester Beach", 50, 50, "maps/wester_beach_map.txt", new ArrayList<>());
+        this.maps.add(westerBeachMap);
+
+        mapLoadStateDebugger = "shrine";
+        mapLoadStateCounter = 0;
+        this.shrineMap = new Map("Shrine", 50, 50, "maps/shrine_map.txt", new ArrayList<>());
+        this.shrineMap.getEntities().add(mapEntity("shrine", 604, 656));
+        this.shrineMap.getEntities().add(mapEntity("tree", 1256, 32));
+        this.shrineMap.getEntities().add(mapEntity("tree", 668, 288));
+        this.shrineMap.getEntities().add(mapEntity("tree", 360, 340));
+        this.shrineMap.getEntities().add(mapEntity("tree", 896, 592));
+        this.shrineMap.getEntities().add(mapEntity("tree", 1364, 612));
+        this.shrineMap.getEntities().add(mapEntity("tree", 232, 720));
+        this.shrineMap.getEntities().add(mapEntity("tree", 784, 932));
+        this.shrineMap.getEntities().add(mapEntity("tree", 1292, 1104));
+        this.shrineMap.getEntities().add(mapEntity("tree", 716, 1280));
+        this.maps.add(shrineMap);
 
         for(Map map : maps) {
             for(Entity entity : map.getEntities()) {
