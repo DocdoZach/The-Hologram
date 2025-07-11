@@ -22,7 +22,7 @@ public class TileManager {
         int col = (x / 32);
         int row = (y / 32);
 
-        if(x < 0 || y < 28 || col >= currentMap.getMaxCol() || row >= currentMap.getMaxRow() + 36) {
+        if(x < 0 || y < 28 || col >= currentMap.getMaxCol() || row >= currentMap.getMaxRow()) {
             return true;
         }
 

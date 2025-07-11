@@ -303,14 +303,21 @@ public class GamePanel extends JPanel implements Runnable {
                 carpet.addComponent(carpetSprite);
                 return carpet;
             }
-            case "chair" -> {
-                Entity chair = new Entity("chair", x, y);
-                Sprite chairSprite = new Sprite("sprites/chair.png", 10, 20, false, this);
-                Xendy.printDebug("Creating chair with entity " + chair + " with debug " + mapLoadStateDebugger + " at " + mapLoadStateCounter);
-                Body chairBody = new Body(new Rectangle(0, 0, 40, 64), this);
-                chair.addComponent(chairSprite);
-                chair.addComponent(chairBody);
-                return chair;
+            case "chair top" -> {
+                Entity chairTop = new Entity("chair top", x, y);
+                Sprite chairTopSprite = new Sprite("sprites/chair_top.png", 10, 12, false, this);
+                Xendy.printDebug("Creating chair top with entity " + chairTop + " with debug " + mapLoadStateDebugger + " at " + mapLoadStateCounter);
+                Body chairBody = new Body(new Rectangle(0, 40, 40, 24), this);
+                chairTop.addComponent(chairTopSprite);
+                chairTop.addComponent(chairBody);
+                return chairTop;
+            }
+            case "chair bottom" -> {
+                Entity chairBottom = new Entity("chair bottom", x, y);
+                Sprite chairBottomSprite = new Sprite("sprites/chair_bottom.png", 10, 8, true, this);
+                Xendy.printDebug("Creating chair bottom with entity " + chairBottom + " with debug " + mapLoadStateDebugger + " at " + mapLoadStateCounter);
+                chairBottom.addComponent(chairBottomSprite);
+                return chairBottom;
             }
             case "Allium" -> {
                 Entity allium = new Entity("Allium", x, y);
@@ -403,12 +410,14 @@ public class GamePanel extends JPanel implements Runnable {
         mapLoadStateCounter = 0;
         this.houseSEMap = new Map("House SE", 25, 20, "maps/houseSE_map.txt", new ArrayList<>());
         this.houseSEMap.getEntities().add(mapEntity("carpet", 288, 240));
-        this.houseSEMap.getEntities().add(mapEntity("chair", 240, 240));
+        this.houseSEMap.getEntities().add(mapEntity("chair top", 240, 240));
+        this.houseSEMap.getEntities().add(mapEntity("chair bottom", 240, 288));
         this.maps.add(houseSEMap);
 
         this.houseSWMap = new Map("House SW", 25, 20, "maps/houseSW_map.txt", new ArrayList<>());
         this.houseSWMap.getEntities().add(mapEntity("carpet", 288, 240));
-        this.houseSWMap.getEntities().add(mapEntity("chair", 600, 200));
+        this.houseSWMap.getEntities().add(mapEntity("chair top", 600, 200));
+        this.houseSWMap.getEntities().add(mapEntity("chair bottom", 600, 248));
         this.maps.add(houseSWMap);
 
         this.houseNWMap = new Map("House NW", 25, 20, "maps/houseNW_map.txt", new ArrayList<>());
