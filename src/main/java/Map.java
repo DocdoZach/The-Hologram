@@ -16,6 +16,7 @@ public class Map {
 
     public void toggleMap(Map newMap) {
         for(Entity entity : this.entities) {
+            Xendy.printfDebug("Unloading entity %s with sprite %s and body %s", entity, entity.getComponent(Sprite.class), entity.getComponent(Body.class));
             if(entity.getComponent(Sprite.class) != null) {
                 entity.getComponent(Sprite.class).setShow(false);
             }

@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 
 public class TileManager {
     private GamePanel gamePanel;
@@ -103,27 +104,15 @@ public class TileManager {
     }
 
     public void draw(Graphics2D g2) {
-        int worldCol = 0;
-        int worldRow = 0;
-
-        while(worldCol < mapTile.length && worldRow < mapTile[0].length) {
-            int tileNum = mapTile[worldCol][worldRow];
-            int x = worldCol * gamePanel.tileSize;
-            int y = worldRow * gamePanel.tileSize;
-
-            int screenX = x - gamePanel.doc.getX() + gamePanel.doc.getCameraX();
-            int screenY = y - gamePanel.doc.getY() + gamePanel.doc.getCameraY();
-
-            if(x + gamePanel.tileSize > gamePanel.doc.getX() - gamePanel.doc.getCameraX() &&
-               y + gamePanel.tileSize > gamePanel.doc.getY() - gamePanel.doc.getCameraY()) {
-                g2.drawImage(tile[tileNum].getTileImage(), screenX, screenY, gamePanel.tileSize, gamePanel.tileSize, null);
-            }
-
-            worldCol++;
-
-            if(worldCol == mapTile[0].length) {
-                worldCol = 0;
-                worldRow++;
+        for (int x = 0; x < mapTile.length * gamePanel.tileSize; x += gamePanel.tileSize) {
+            for (int y = 0; y < mapTile[0].length * gamePanel.tileSize; y += gamePanel.tileSize) {
+                int tileNum = mapTile[x/gamePanel.tileSize][y/gamePanel.tileSize];
+                int screenX = x - gamePanel.doc.getX() + gamePanel.doc.getCameraX();
+                int screenY = y - gamePanel.doc.getY() + gamePanel.doc.getCameraY();
+                if(x + gamePanel.tileSize > gamePanel.doc.getX() - gamePanel.doc.getCameraX() &&
+                        y + gamePanel.tileSize > gamePanel.doc.getY() - gamePanel.doc.getCameraY()) {
+                    g2.drawImage(tile[tileNum].getTileImage(), screenX, screenY, gamePanel.tileSize, gamePanel.tileSize, null);
+                }
             }
         }
     }
@@ -152,6 +141,8 @@ public class TileManager {
                 }
             }
             if (currentMap != null) currentMap.toggleMap(map);
+            Xendy.printfDebug("Loaded map %s with size (%s, %s)", map.getName(), map.getMaxRow(), map.getMaxCol());
+//            Xendy.printDebug(Arrays.deepToString(mapTile).replaceAll(", \\[", ", \n["));
             currentMap = map;
         } catch(Exception e) {
 
