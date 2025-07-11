@@ -23,7 +23,8 @@ public class GamePanel extends JPanel implements Runnable {
             houseNWMap, houseNEMap, patchMap, ruinsMap,
             westBeachMap, castleGateMap, eastBeachMap,
             deltaMap, lakeMap, easterBeachMap, towerMap,
-            westerBeachMap, shrineMap;
+            westerBeachMap, shrineMap,
+            forestTransBottomMap, forestEastEntranceMap;
     private ArrayList<Map> maps = new ArrayList<>();
 
     public volatile ArrayList<Sprite> sprites = new ArrayList<>();
@@ -254,6 +255,10 @@ public class GamePanel extends JPanel implements Runnable {
         // shrine <-> ruins
         exitedMapHorizontally(doc, ruinsMap, shrineMap, 0, 1600, -12, 1556, player.getY());
         exitedMapHorizontally(doc, shrineMap, ruinsMap, 0, 1600, 1564, -8, player.getY());
+
+        // shrine <-> forest trans botton
+        exitedMapHorizontally(doc, shrineMap, forestTransBottomMap, 0, 1600, -12, 756, player.getY());
+        exitedMapHorizontally(doc, forestTransBottomMap, shrineMap, 0, 1600, 764, -8, player.getY());
     }
 /*
     public void checkEntityInteractions(Player player) {
@@ -291,6 +296,22 @@ public class GamePanel extends JPanel implements Runnable {
                 well.addComponent(wellBody);
                 return well;
             }
+            case "carpet" -> {
+                Entity carpet = new Entity("carpet", x, y);
+                Sprite carpetSprite = new Sprite("sprites/carpet.png", 56, 40, true, this);
+                Xendy.printDebug("Creating carpet with entity " + carpet + " with debug " + mapLoadStateDebugger + " at " + mapLoadStateCounter);
+                carpet.addComponent(carpetSprite);
+                return carpet;
+            }
+            case "chair" -> {
+                Entity chair = new Entity("chair", x, y);
+                Sprite chairSprite = new Sprite("sprites/chair.png", 10, 20, false, this);
+                Xendy.printDebug("Creating chair with entity " + chair + " with debug " + mapLoadStateDebugger + " at " + mapLoadStateCounter);
+                Body chairBody = new Body(new Rectangle(0, 0, 40, 64), this);
+                chair.addComponent(chairSprite);
+                chair.addComponent(chairBody);
+                return chair;
+            }
             case "Allium" -> {
                 Entity allium = new Entity("Allium", x, y);
                 Sprite alliumSprite = new Sprite("sprites/allium.png", 12, 20, false, this);
@@ -320,7 +341,7 @@ public class GamePanel extends JPanel implements Runnable {
             case "tower bottom" -> {
                 Entity towerBottom = new Entity("tower top", x, y);
                 Sprite towerSpriteBottom = new Sprite("sprites/tower_bottom.png", 52, 12, true, this);
-                Xendy.printDebug("Creating tower top with entity " + towerBottom + " with debug " + mapLoadStateDebugger + " at " + mapLoadStateCounter);
+                Xendy.printDebug("Creating tower bottom with entity " + towerBottom + " with debug " + mapLoadStateDebugger + " at " + mapLoadStateCounter);
                 towerBottom.addComponent(towerSpriteBottom);
                 return towerBottom;
             }
@@ -332,6 +353,15 @@ public class GamePanel extends JPanel implements Runnable {
                 shrine.addComponent(shrineSprite);
                 shrine.addComponent(shrineBody);
                 return shrine;
+            }
+            case "tall tree" -> {
+                Entity tallTree = new Entity("tall tree", x, y);
+                Sprite tallTreeSprite = new Sprite("sprites/tall_tree.png", 25, 83, false, this);
+                Xendy.printDebug("Creating tall tree with entity " + tallTree + " with debug " + mapLoadStateDebugger + " at " + mapLoadStateCounter);
+                Body tallTreeBody = new Body(new Rectangle(32, 264, 40, 64), this);
+                tallTree.addComponent(tallTreeSprite);
+                tallTree.addComponent(tallTreeBody);
+                return tallTree;
             }
         }
         return new Entity();
@@ -372,15 +402,21 @@ public class GamePanel extends JPanel implements Runnable {
         mapLoadStateDebugger = "houses";
         mapLoadStateCounter = 0;
         this.houseSEMap = new Map("House SE", 25, 20, "maps/houseSE_map.txt", new ArrayList<>());
-        this.maps.add(riverMap);
+        this.houseSEMap.getEntities().add(mapEntity("carpet", 288, 240));
+        this.houseSEMap.getEntities().add(mapEntity("chair", 240, 240));
+        this.maps.add(houseSEMap);
 
         this.houseSWMap = new Map("House SW", 25, 20, "maps/houseSW_map.txt", new ArrayList<>());
+        this.houseSWMap.getEntities().add(mapEntity("carpet", 288, 240));
+        this.houseSWMap.getEntities().add(mapEntity("chair", 600, 200));
         this.maps.add(houseSWMap);
 
         this.houseNWMap = new Map("House NW", 25, 20, "maps/houseNW_map.txt", new ArrayList<>());
+        this.houseNWMap.getEntities().add(mapEntity("carpet", 288, 240));
         this.maps.add(houseNWMap);
 
         this.houseNEMap = new Map("House NE", 25, 20, "maps/houseNE_map.txt", new ArrayList<>());
+        this.houseNEMap.getEntities().add(mapEntity("carpet", 288, 240));
         this.maps.add(houseNEMap);
 
         mapLoadStateDebugger = "patch";
@@ -488,6 +524,24 @@ public class GamePanel extends JPanel implements Runnable {
         this.shrineMap.getEntities().add(mapEntity("tree", 1292, 1104));
         this.shrineMap.getEntities().add(mapEntity("tree", 716, 1280));
         this.maps.add(shrineMap);
+
+        mapLoadStateDebugger = "forest trans bottom";
+        mapLoadStateCounter = 0;
+        this.forestTransBottomMap = new Map("Forest Transition Bottom", 25, 50, "maps/forest_trans_bottom_map.txt", new ArrayList<>());
+        this.forestTransBottomMap.getEntities().add(mapEntity("tree", -24, 64));
+        this.forestTransBottomMap.getEntities().add(mapEntity("tree", 468, 72));
+        this.forestTransBottomMap.getEntities().add(mapEntity("tree", 72, 172));
+        this.forestTransBottomMap.getEntities().add(mapEntity("tree", 36, 532));
+        this.forestTransBottomMap.getEntities().add(mapEntity("tree", -12, 680));
+        this.forestTransBottomMap.getEntities().add(mapEntity("tree", 100, 904));
+        this.forestTransBottomMap.getEntities().add(mapEntity("tree", 404, 1104));
+        this.maps.add(forestTransBottomMap);
+
+        mapLoadStateDebugger = "forest east entrance";
+        this.forestEastEntranceMap = new Map("Forest East Entrance", 40, 20, "maps/forest_east_entrance_map.txt", new ArrayList<>());
+        mapLoadStateCounter = 0;
+
+        this.maps.add(forestEastEntranceMap);
 
         for(Map map : maps) {
             for(Entity entity : map.getEntities()) {
